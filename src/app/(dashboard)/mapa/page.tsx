@@ -13,7 +13,7 @@ export default function MapaPage() {
 
   return (
     <div className="h-[calc(100vh-8rem)] w-full">
-        <ReportsMap reports={filteredReports} center={[-34.27, -59.4]} zoom={11} className="h-full w-full rounded-lg shadow-lg" />
+        <ReportsMap reports={filteredReports} center={[-34.23, -59.48]} zoom={11} className="h-full w-full rounded-lg shadow-lg" />
     </div>
   );
 }
