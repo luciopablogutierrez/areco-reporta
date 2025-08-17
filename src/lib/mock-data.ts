@@ -40,8 +40,8 @@ const generateReportsForLocation = (location: { lat: number, lng: number, name: 
     const template = reportTemplates[category](location.name);
     
     // Create slightly different coordinates for each report
-    const newLat = location.lat + (Math.random() - 0.5) * 0.005;
-    const newLng = location.lng + (Math.random() - 0.5) * 0.005;
+    const newLat = location.lat + (Math.random() - 0.5) * 0.01;
+    const newLng = location.lng + (Math.random() - 0.5) * 0.01;
 
     reports.push({
       id: `${id}`,
