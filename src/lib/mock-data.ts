@@ -11,7 +11,7 @@ const createTimestamp = (): { toDate: () => Date } => ({
 const locations = {
   "San Antonio de Areco": { lat: -34.246, lng: -59.479, name: "San Antonio de Areco" },
   "Villa Lía": { lat: -34.185, lng: -59.335, name: "Villa Lía" },
-  "Duggan": { lat: -34.398, lng: -59.355, name: "Duggan" },
+  "Duggan": { lat: -34.3437, lng: -59.3622, name: "Duggan" },
   "Vagues": { lat: -34.285, lng: -59.475, name: "Vagues" },
 };
 
