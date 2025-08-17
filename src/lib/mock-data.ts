@@ -11,7 +11,7 @@ const createTimestamp = (): { toDate: () => Date } => ({
 const locations = {
   "San Antonio de Areco": { lat: -34.246, lng: -59.479, name: "San Antonio de Areco" },
   "Villa Lía": { lat: -34.185, lng: -59.335, name: "Villa Lía" },
-  "Duggan": { lat: -34.233, lng: -59.333, name: "Duggan" },
+  "Duggan": { lat: -34.218, lng: -59.369, name: "Duggan" },
   "Vagues": { lat: -34.285, lng: -59.475, name: "Vagues" },
 };
 
@@ -40,8 +40,8 @@ const generateReportsForLocation = (location: { lat: number, lng: number, name: 
     const template = reportTemplates[category](location.name);
     
     // Create slightly different coordinates for each report
-    const newLat = location.lat + (Math.random() - 0.5) * 0.05;
-    const newLng = location.lng + (Math.random() - 0.5) * 0.05;
+    const newLat = location.lat + (Math.random() - 0.5) * 0.015;
+    const newLng = location.lng + (Math.random() - 0.5) * 0.015;
 
     reports.push({
       id: `${id}`,
