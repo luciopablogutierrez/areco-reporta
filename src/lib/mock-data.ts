@@ -1,109 +1,75 @@
-import type { Report } from "@/types";
+import type { Report, ReportCategory, ReportPriority, ReportStatus } from "@/types";
 
 const createTimestamp = (): { toDate: () => Date } => ({
-  toDate: () => new Date(),
+  toDate: () => {
+    const date = new Date();
+    date.setDate(date.getDate() - Math.floor(Math.random() * 30));
+    return date;
+  },
 });
 
+const locations = {
+  "San Antonio de Areco": { lat: -34.246, lng: -59.479, name: "San Antonio de Areco" },
+  "Villa Lía": { lat: -34.185, lng: -59.335, name: "Villa Lía" },
+  "Duggan": { lat: -34.333, lng: -59.333, name: "Duggan" },
+  "Vagues": { lat: -34.285, lng: -59.475, name: "Vagues" },
+};
+
+const categories: ReportCategory[] = ['baches', 'alumbrado', 'basura', 'senalizacion', 'espacios_verdes', 'infraestructura', 'otros'];
+const statuses: ReportStatus[] = ['pending', 'in_progress', 'resolved', 'rejected'];
+const priorities: ReportPriority[] = ['low', 'medium', 'high', 'urgent'];
+const userIds = ['user1', 'user2', 'user3', 'user4', 'user5'];
+
+const reportTemplates = {
+    baches: (loc: string) => ({ title: `Bache en calle principal de ${loc}`, description: `Hay un bache peligroso en una de las calles céntricas de ${loc} que necesita reparación.` }),
+    alumbrado: (loc: string) => ({ title: `Poste de luz sin funcionar en ${loc}`, description: `Un poste de alumbrado público lleva varios días sin funcionar en ${loc}, dejando la zona a oscuras.` }),
+    basura: (loc: string) => ({ title: `Contenedor desbordado en ${loc}`, description: `El contenedor de la plaza principal de ${loc} está lleno y la basura se acumula alrededor.` }),
+    senalizacion: (loc: string) => ({ title: `Señal de tránsito dañada en ${loc}`, description: `Una señal de 'PARE' fue vandalizada y es ilegible, generando un riesgo en ${loc}.` }),
+    espacios_verdes: (loc: string) => ({ title: `Pasto muy alto en plaza de ${loc}`, description: `El césped de la plaza de ${loc} no se corta hace semanas y está muy descuidado.` }),
+    infraestructura: (loc: string) => ({ title: `Vereda rota en ${loc}`, description: `La vereda de la calle principal de ${loc} está rota y es peligrosa para los peatones.` }),
+    otros: (loc: string) => ({ title: `Problema vario en ${loc}`, description: `Se reporta un problema de mantenimiento general en la zona comercial de ${loc}.` }),
+};
+
+const getRandomElement = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+
+const generateReportsForLocation = (location: { lat: number, lng: number, name: string }, count: number, startId: number): Report[] => {
+  const reports: Report[] = [];
+  for (let i = 0; i < count; i++) {
+    const id = startId + i;
+    const category = getRandomElement(categories);
+    const template = reportTemplates[category](location.name);
+    
+    // Create slightly different coordinates for each report
+    const newLat = location.lat + (Math.random() - 0.5) * 0.05;
+    const newLng = location.lng + (Math.random() - 0.5) * 0.05;
+
+    reports.push({
+      id: `${id}`,
+      title: template.title,
+      description: template.description,
+      category,
+      location: { latitude: newLat, longitude: newLng },
+      address: `${location.name}, Buenos Aires`,
+      coordinates: { lat: newLat, lng: newLng },
+      images: [`https://placehold.co/600x400.png?text=${encodeURIComponent(location.name)}+${i+1}`],
+      status: getRandomElement(statuses),
+      priority: getRandomElement(priorities),
+      isPublic: Math.random() > 0.2,
+      userId: getRandomElement(userIds),
+      municipalityId: "areco",
+      upvotes: Math.floor(Math.random() * 50),
+      upvotedBy: [],
+      tags: [location.name.toLowerCase().replace(/ /g, '_'), category],
+      createdAt: createTimestamp(),
+      updatedAt: createTimestamp(),
+    });
+  }
+  return reports;
+};
+
 export const mockReports: Report[] = [
-  {
-    id: "1",
-    title: "Bache peligroso en Av. Corrientes",
-    description: "Hay un bache muy grande cerca del cruce con Callao que es un peligro para los autos y motos.",
-    category: "baches",
-    location: { latitude: -34.6037, longitude: -58.3816 },
-    address: "Av. Corrientes 1234, CABA",
-    coordinates: { lat: -34.6037, lng: -58.3816 },
-    images: ["https://placehold.co/600x400.png?text=Bache+1", "https://placehold.co/600x400.png?text=Bache+2"],
-    status: "pending",
-    priority: "high",
-    isPublic: true,
-    userId: "user1",
-    municipalityId: "caba",
-    upvotes: 15,
-    upvotedBy: [],
-    tags: ["calle", "peligro"],
-    createdAt: createTimestamp(),
-    updatedAt: createTimestamp(),
-  },
-  {
-    id: "2",
-    title: "Luz quemada en poste de Plaza Serrano",
-    description: "El farol de la esquina de Honduras y Serrano no funciona desde hace una semana.",
-    category: "alumbrado",
-    location: { latitude: -34.588, longitude: -58.427 },
-    address: "Honduras 5000, CABA",
-    coordinates: { lat: -34.588, lng: -58.427 },
-    images: ["https://placehold.co/600x400.png?text=Luz+Quemada"],
-    status: "in_progress",
-    priority: "medium",
-    isPublic: true,
-    userId: "user2",
-    municipalityId: "caba",
-    upvotes: 7,
-    upvotedBy: [],
-    tags: ["iluminacion", "plaza"],
-    createdAt: createTimestamp(),
-    updatedAt: createTimestamp(),
-  },
-  {
-    id: "3",
-    title: "Basura acumulada en contenedor",
-    description: "El contenedor de la esquina está desbordado de basura, necesita recolección urgente.",
-    category: "basura",
-    location: { latitude: -34.6178, longitude: -58.3686 },
-    address: "Av. de Mayo 500, CABA",
-    coordinates: { lat: -34.6178, lng: -58.3686 },
-    images: [],
-    status: "resolved",
-    priority: "urgent",
-    isPublic: true,
-    userId: "user3",
-    municipalityId: "caba",
-    upvotes: 22,
-    upvotedBy: [],
-    tags: ["limpieza", "contenedor"],
-    createdAt: createTimestamp(),
-    updatedAt: createTimestamp(),
-    resolvedAt: createTimestamp(),
-  },
-  {
-    id: "4",
-    title: "Señal de PARE caída",
-    description: "La señal de PARE en la esquina de Defensa y Chile se cayó y puede causar un accidente.",
-    category: "senalizacion",
-    location: { latitude: -34.6173, longitude: -58.3725 },
-    address: "Defensa 800, San Telmo",
-    coordinates: { lat: -34.6173, lng: -58.3725 },
-    images: ["https://placehold.co/600x400.png?text=Señal+Caída"],
-    status: "pending",
-    priority: "high",
-    isPublic: true,
-    userId: "user1",
-    municipalityId: "caba",
-    upvotes: 11,
-    upvotedBy: [],
-    tags: ["transito", "seguridad"],
-    createdAt: createTimestamp(),
-    updatedAt: createTimestamp(),
-  },
-  {
-    id: "5",
-    title: "Banco roto en Parque Lezama",
-    description: "Uno de los bancos de madera cerca del anfiteatro está roto.",
-    category: "espacios_verdes",
-    location: { latitude: -34.6276, longitude: -58.3699 },
-    address: "Parque Lezama, CABA",
-    coordinates: { lat: -34.6276, lng: -58.3699 },
-    images: ["https://placehold.co/600x400.png?text=Banco+Roto"],
-    status: "rejected",
-    priority: "low",
-    isPublic: false,
-    userId: "user2",
-    municipalityId: "caba",
-    upvotes: 3,
-    upvotedBy: [],
-    tags: ["parque", "mobiliario"],
-    createdAt: createTimestamp(),
-    updatedAt: createTimestamp(),
-  },
+  ...generateReportsForLocation(locations["San Antonio de Areco"], 50, 1),
+  ...generateReportsForLocation(locations["Villa Lía"], 50, 51),
+  ...generateReportsForLocation(locations["Duggan"], 50, 101),
+  ...generateReportsForLocation(locations["Vagues"], 50, 151),
 ];

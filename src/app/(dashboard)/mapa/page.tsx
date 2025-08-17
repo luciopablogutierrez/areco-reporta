@@ -38,7 +38,7 @@ export default function MapaPage() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <div className="lg:col-span-3">
-        <ReportsMap reports={filteredReports} />
+        <ReportsMap reports={filteredReports} center={[-34.246, -59.479]} zoom={11} />
       </div>
       <div className="lg:col-span-1">
         <Card>
