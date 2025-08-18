@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -13,6 +13,7 @@ import { Camera, Home, Mail, MapPin, Phone, Search, Loader2 } from 'lucide-react
 import { mockReports } from '@/lib/mock-data';
 import type { Report } from '@/types';
 import { useToast } from '@/hooks/use-toast';
+import { useDebounce } from '@/hooks/use-debounce';
 
 const ReportsMap = dynamic(() => import('@/components/map/reports-map'), {
   ssr: false,
@@ -34,6 +35,7 @@ export default function CrearIncidenciaPage() {
     const [addressResults, setAddressResults] = useState<NominatimResult[]>([]);
     const [isLoadingAddress, setIsLoadingAddress] = useState(false);
     const { toast } = useToast();
+    const debouncedSearchTerm = useDebounce(addressQuery, 500);
 
 
     const handleMapClick = (latlng: { lat: number; lng: number }) => {
@@ -41,14 +43,14 @@ export default function CrearIncidenciaPage() {
         setMapCenter([latlng.lat, latlng.lng]);
     };
 
-    const handleSearchAddress = useCallback(async () => {
-        if (addressQuery.length < 5) {
+    const handleSearchAddress = useCallback(async (query: string) => {
+        if (query.length < 5) {
             setAddressResults([]);
             return;
         };
         setIsLoadingAddress(true);
         try {
-            const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addressQuery + ', San Antonio de Areco, Buenos Aires, Argentina')}&format=json&limit=5`);
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', San Antonio de Areco, Buenos Aires, Argentina')}&format=json&limit=5`);
             const data: NominatimResult[] = await response.json();
             setAddressResults(data);
         } catch (error) {
@@ -61,7 +63,15 @@ export default function CrearIncidenciaPage() {
         } finally {
             setIsLoadingAddress(false);
         }
-    }, [addressQuery, toast]);
+    }, [toast]);
+
+    useEffect(() => {
+        if (debouncedSearchTerm) {
+            handleSearchAddress(debouncedSearchTerm);
+        } else {
+            setAddressResults([]);
+        }
+    }, [debouncedSearchTerm, handleSearchAddress]);
 
     const handleSelectAddress = (result: NominatimResult) => {
         const lat = parseFloat(result.lat);
@@ -96,22 +106,12 @@ export default function CrearIncidenciaPage() {
                                 className="pl-10"
                                 value={addressQuery}
                                 onChange={(e) => setAddressQuery(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault();
-                                        handleSearchAddress();
-                                    }
-                                }}
                             />
-                            <Button 
-                                variant="ghost" 
-                                size="icon" 
+                            <div                                 
                                 className="absolute right-1 top-1/2 -translate-y-1/2"
-                                onClick={handleSearchAddress}
-                                disabled={isLoadingAddress}
                             >
-                                {isLoadingAddress ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
-                            </Button>
+                                {isLoadingAddress ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5 text-muted-foreground" />}
+                            </div>
                         </div>
                         {addressResults.length > 0 && (
                             <div className="relative">
