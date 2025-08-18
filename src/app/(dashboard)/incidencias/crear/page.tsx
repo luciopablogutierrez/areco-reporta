@@ -1,6 +1,7 @@
+
 'use client'
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -8,22 +9,69 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Camera, Home, Mail, MapPin, Phone, Search } from 'lucide-react';
+import { Camera, Home, Mail, MapPin, Phone, Search, Loader2 } from 'lucide-react';
 import { mockReports } from '@/lib/mock-data';
 import type { Report } from '@/types';
+import { useToast } from '@/hooks/use-toast';
 
 const ReportsMap = dynamic(() => import('@/components/map/reports-map'), {
   ssr: false,
 });
 
+interface NominatimResult {
+    place_id: number;
+    lat: string;
+    lon: string;
+    display_name: string;
+}
+
+
 export default function CrearIncidenciaPage() {
     const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
+    const [mapCenter, setMapCenter] = useState<[number, number]>([-34.23, -59.48]);
     const [reports, setReports] = useState<Report[]>(mockReports);
+    const [addressQuery, setAddressQuery] = useState('');
+    const [addressResults, setAddressResults] = useState<NominatimResult[]>([]);
+    const [isLoadingAddress, setIsLoadingAddress] = useState(false);
+    const { toast } = useToast();
+
 
     const handleMapClick = (latlng: { lat: number; lng: number }) => {
         setSelectedLocation(latlng);
-        // You could also reverse-geocode here to get an address
+        setMapCenter([latlng.lat, latlng.lng]);
     };
+
+    const handleSearchAddress = useCallback(async () => {
+        if (addressQuery.length < 5) {
+            setAddressResults([]);
+            return;
+        };
+        setIsLoadingAddress(true);
+        try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addressQuery + ', San Antonio de Areco, Buenos Aires, Argentina')}&format=json&limit=5`);
+            const data: NominatimResult[] = await response.json();
+            setAddressResults(data);
+        } catch (error) {
+            console.error('Error fetching address:', error);
+            toast({
+                title: "Error de Búsqueda",
+                description: "No se pudo buscar la dirección. Intente de nuevo.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsLoadingAddress(false);
+        }
+    }, [addressQuery, toast]);
+
+    const handleSelectAddress = (result: NominatimResult) => {
+        const lat = parseFloat(result.lat);
+        const lng = parseFloat(result.lon);
+        setAddressQuery(result.display_name);
+        setSelectedLocation({ lat, lng });
+        setMapCenter([lat, lng]);
+        setAddressResults([]);
+    };
+
 
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">
@@ -42,11 +90,44 @@ export default function CrearIncidenciaPage() {
                         <Label htmlFor="location">Ubicación de la incidencia *</Label>
                         <div className="relative">
                             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                            <Input id="location" placeholder="Escriba la calle o haga clic en el mapa" className="pl-10" />
-                            <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2">
-                                <Search className="h-5 w-5" />
+                            <Input 
+                                id="location" 
+                                placeholder="Escriba la calle para buscar..." 
+                                className="pl-10"
+                                value={addressQuery}
+                                onChange={(e) => setAddressQuery(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleSearchAddress();
+                                    }
+                                }}
+                            />
+                            <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="absolute right-1 top-1/2 -translate-y-1/2"
+                                onClick={handleSearchAddress}
+                                disabled={isLoadingAddress}
+                            >
+                                {isLoadingAddress ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
                             </Button>
                         </div>
+                        {addressResults.length > 0 && (
+                            <div className="relative">
+                                <ul className="absolute z-10 w-full bg-card border rounded-md shadow-lg mt-1 max-h-60 overflow-y-auto">
+                                    {addressResults.map((result) => (
+                                        <li 
+                                            key={result.place_id} 
+                                            className="px-4 py-2 cursor-pointer hover:bg-accent"
+                                            onClick={() => handleSelectAddress(result)}
+                                        >
+                                            <p className="text-sm font-medium">{result.display_name}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                          {selectedLocation && (
                             <p className="text-xs text-muted-foreground">
                                 Coordenadas seleccionadas: {selectedLocation.lat.toFixed(5)}, {selectedLocation.lng.toFixed(5)}
@@ -121,9 +202,18 @@ export default function CrearIncidenciaPage() {
             </Button>
         </div>
         <div className="h-[calc(100vh-8rem)] sticky top-8">
-            <ReportsMap reports={reports} onMapClick={handleMapClick} center={[-34.23, -59.48]} zoom={11} className="h-full w-full rounded-lg shadow-lg" />
+            <ReportsMap 
+                reports={reports} 
+                onMapClick={handleMapClick} 
+                center={mapCenter} 
+                zoom={14} 
+                className="h-full w-full rounded-lg shadow-lg"
+                selectedLocation={selectedLocation}
+            />
         </div>
       </div>
     </div>
   );
 }
+
+    

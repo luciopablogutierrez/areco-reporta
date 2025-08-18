@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useRef } from 'react';
@@ -10,6 +11,7 @@ interface ReportsMapProps {
   center?: [number, number];
   zoom?: number;
   className?: string;
+  selectedLocation?: { lat: number; lng: number } | null;
 }
 
 const ReportsMap: React.FC<ReportsMapProps> = ({
@@ -19,10 +21,12 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
   center = [-34.6037, -58.3816], // Buenos Aires default
   zoom = 13,
   className = "h-[calc(100vh-14rem)] w-full rounded-lg shadow-lg",
+  selectedLocation,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any | null>(null);
   const markersGroupRef = useRef<any | null>(null);
+  const selectedMarkerRef = useRef<any | null>(null);
 
   // Dynamically import Leaflet and MarkerCluster to avoid SSR issues
   useEffect(() => {
@@ -63,7 +67,15 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
         }
       };
     }
-  }, [center, zoom, onMapClick]);
+  }, []);
+
+  // Center map when center prop changes
+  useEffect(() => {
+    if (mapInstanceRef.current && center) {
+        mapInstanceRef.current.setView(center, zoom);
+    }
+  }, [center, zoom]);
+
 
   // Update markers when reports change
   useEffect(() => {
@@ -143,7 +155,29 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
     }
   }, [reports, onReportClick]);
 
+  // Handle selected location marker
+    useEffect(() => {
+        if (mapInstanceRef.current) {
+            const L = require('leaflet');
+            
+            // Remove previous marker
+            if (selectedMarkerRef.current) {
+                selectedMarkerRef.current.remove();
+                selectedMarkerRef.current = null;
+            }
+
+            // Add new marker if a location is selected
+            if (selectedLocation) {
+                const marker = L.marker([selectedLocation.lat, selectedLocation.lng]).addTo(mapInstanceRef.current);
+                marker.bindPopup("Ubicación de la nueva incidencia.").openPopup();
+                selectedMarkerRef.current = marker;
+            }
+        }
+    }, [selectedLocation]);
+
   return <div ref={mapRef} className={className} />;
 };
 
 export default ReportsMap;
+
+    
