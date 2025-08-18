@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Clock, MapPin, Tag, ThumbsUp } from "lucide-react";
 import Image from "next/image";
+import { categoryText, statusText } from "@/lib/i18n";
 
 interface ReportCardProps {
   report: Report;
@@ -17,22 +18,6 @@ const statusVariant: Record<ReportStatus, "default" | "secondary" | "destructive
     rejected: 'outline'
 };
 
-const statusText: Record<ReportStatus, string> = {
-    pending: 'Pendiente',
-    in_progress: 'En Proceso',
-    resolved: 'Resuelto',
-    rejected: 'Rechazado'
-}
-
-const categoryText: Record<ReportCategory, string> = {
-    baches: 'Baches',
-    alumbrado: 'Alumbrado',
-    basura: 'Basura',
-    senalizacion: 'Señalización',
-    espacios_verdes: 'Espacios Verdes',
-    infraestructura: 'Infraestructura',
-    otros: 'Otros'
-}
 
 export function ReportCard({ report }: ReportCardProps) {
   return (

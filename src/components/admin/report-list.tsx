@@ -12,6 +12,7 @@ import { mockReports } from "@/lib/mock-data"
 import type { ReportStatus, ReportPriority } from "@/types"
 import { formatDistanceToNow } from "date-fns"
 import { es } from "date-fns/locale"
+import { priorityText, statusText } from "@/lib/i18n"
 
 const statusVariant: Record<ReportStatus, "default" | "secondary" | "destructive" | "outline"> = {
     pending: 'destructive',
@@ -20,19 +21,6 @@ const statusVariant: Record<ReportStatus, "default" | "secondary" | "destructive
     rejected: 'outline'
 };
 
-const statusText: Record<ReportStatus, string> = {
-    pending: 'Pendiente',
-    in_progress: 'En Proceso',
-    resolved: 'Resuelto',
-    rejected: 'Rechazado'
-};
-
-const priorityText: Record<ReportPriority, string> = {
-    low: 'Baja',
-    medium: 'Media',
-    high: 'Alta',
-    urgent: 'Urgente'
-};
 
 export function ReportList() {
   return (
