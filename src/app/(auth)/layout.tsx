@@ -12,7 +12,7 @@ export default function AuthLayout({
             <div className="p-3 rounded-lg bg-primary text-primary-foreground">
                 <Home className="w-7 h-7"/>
             </div>
-            <h1 className="text-4xl font-bold text-primary">CiudadConecta</h1>
+            <h1 className="text-4xl font-bold text-primary">Vecinos Activos Areco</h1>
         </div>
         {children}
       </div>

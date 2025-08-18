@@ -9,7 +9,7 @@ export default function RegistroPage() {
     <Card>
       <CardHeader>
         <CardTitle>Crear Cuenta</CardTitle>
-        <CardDescription>Únete a CiudadConecta y ayuda a mejorar tu comunidad.</CardDescription>
+        <CardDescription>Únete a Vecinos Activos Areco y ayuda a mejorar tu comunidad.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
