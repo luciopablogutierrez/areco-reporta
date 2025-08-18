@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, FileText, Home, MapIcon, User, Users, Shield, PlusCircle } from "lucide-react"
+import { Bell, FileText, Home, MapIcon, User, Shield, PlusCircle } from "lucide-react"
 
 import {
   Sidebar,
@@ -21,13 +21,9 @@ const menuItems = [
   { href: "/mapa", label: "Mapa Interactivo", icon: MapIcon },
   { href: "/incidencias/crear", label: "Crear Incidencia", icon: PlusCircle },
   { href: "/reportes", label: "Mis Reportes", icon: FileText },
+  { href: "/notificaciones", label: "Notificaciones", icon: Bell },
   { href: "/admin", label: "Panel Admin", icon: Shield },
 ];
-
-const userMenuItems = [
-    { href: "/perfil", label: "Mi Perfil", icon: User },
-    { href: "/notificaciones", label: "Notificaciones", icon: Bell },
-]
 
 export function SidebarNav() {
   const pathname = usePathname()

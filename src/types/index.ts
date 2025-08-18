@@ -99,3 +99,11 @@ export interface ReportUpdate {
   attachments?: string[];
   createdAt: Timestamp;
 }
+
+export interface Notification {
+  id: string;
+  type: 'status_change' | 'new_comment' | 'report_resolved' | 'mention';
+  message: string;
+  read: boolean;
+  createdAt: Date;
+}
