@@ -6,9 +6,13 @@ import { es } from "date-fns/locale";
 import { Clock, MapPin, Tag, ThumbsUp } from "lucide-react";
 import Image from "next/image";
 import { categoryText, statusText } from "@/lib/i18n";
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 interface ReportCardProps {
   report: Report;
+  onUpvote?: () => void;
+  isUpvoted?: boolean;
 }
 
 const statusVariant: Record<ReportStatus, "default" | "secondary" | "destructive" | "outline"> = {
@@ -19,7 +23,7 @@ const statusVariant: Record<ReportStatus, "default" | "secondary" | "destructive
 };
 
 
-export function ReportCard({ report }: ReportCardProps) {
+export function ReportCard({ report, onUpvote, isUpvoted }: ReportCardProps) {
   return (
     <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg">
       <CardHeader>
@@ -39,7 +43,7 @@ export function ReportCard({ report }: ReportCardProps) {
         )}
         <p className="text-sm text-muted-foreground">{report.description}</p>
       </CardContent>
-      <CardFooter className="flex justify-between text-xs text-muted-foreground bg-secondary/30 p-4">
+      <CardFooter className="flex justify-between items-center text-xs text-muted-foreground bg-secondary/30 p-4">
         <div className="flex items-center gap-2">
             <Tag className="w-3 h-3" />
             <span>{categoryText[report.category]}</span>
@@ -48,10 +52,20 @@ export function ReportCard({ report }: ReportCardProps) {
             <Clock className="w-3 h-3" />
             <span>{format(report.createdAt.toDate(), "d MMM, yyyy", { locale: es })}</span>
         </div>
-        <div className="flex items-center gap-2">
-            <ThumbsUp className="w-3 h-3" />
+         <Button 
+            variant="ghost" 
+            size="sm" 
+            className={cn(
+                "flex items-center gap-1.5 h-auto p-1 -m-1 text-xs",
+                isUpvoted && "text-primary hover:text-primary"
+            )}
+            onClick={onUpvote}
+            disabled={isUpvoted}
+            aria-label="Votar"
+        >
+            <ThumbsUp className="w-3.5 h-3.5" />
             <span>{report.upvotes}</span>
-        </div>
+        </Button>
       </CardFooter>
     </Card>
   );

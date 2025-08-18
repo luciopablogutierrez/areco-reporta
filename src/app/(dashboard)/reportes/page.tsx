@@ -1,4 +1,3 @@
-
 'use client'
 
 import * as React from 'react';
@@ -35,9 +34,32 @@ export default function ReportesPage() {
         toggleStatus, 
         toggleCategory 
     } = useFilterStore();
+    
+    // In a real app, this would be fetched state
+    const [reports, setReports] = React.useState<Report[]>(mockReports);
+
+    const handleUpvote = (reportId: string, userId: string = 'user1') => {
+        setReports(prevReports => {
+            const newReports = prevReports.map(report => {
+                if (report.id === reportId) {
+                    if (report.upvotedBy.includes(userId)) {
+                        // User already upvoted, do nothing or allow to un-vote
+                        return report;
+                    }
+                    return {
+                        ...report,
+                        upvotes: report.upvotes + 1,
+                        upvotedBy: [...report.upvotedBy, userId],
+                    };
+                }
+                return report;
+            });
+            return newReports;
+        });
+    };
 
   // In a real app, this would fetch reports for the logged-in user
-  const userReports = mockReports.filter(r => r.userId === 'user1' || r.userId === 'user2');
+  const userReports = reports.filter(r => r.userId === 'user1' || r.userId === 'user2');
 
   const filteredReports = React.useMemo(() => {
     return userReports
@@ -139,7 +161,12 @@ export default function ReportesPage() {
       {filteredReports.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredReports.map(report => (
-            <ReportCard key={report.id} report={report} />
+            <ReportCard 
+                key={report.id} 
+                report={report} 
+                onUpvote={() => handleUpvote(report.id)}
+                isUpvoted={report.upvotedBy.includes('user1')}
+            />
           ))}
         </div>
       ) : (
