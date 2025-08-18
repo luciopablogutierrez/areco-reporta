@@ -1,3 +1,4 @@
+
 "use client"
 
 import Link from "next/link"
@@ -43,13 +44,16 @@ export function SidebarNav() {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.label}>
-              <Link href={item.href} legacyBehavior passHref>
+              <Link href={item.href}>
                 <SidebarMenuButton
+                  asChild
                   isActive={pathname === item.href}
                   tooltip={item.label}
                 >
-                  <item.icon />
-                  <span>{item.label}</span>
+                  <div>
+                    <item.icon />
+                    <span>{item.label}</span>
+                  </div>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
@@ -67,11 +71,13 @@ export function SidebarNav() {
                 <p className="text-xs text-muted-foreground">ciudadano@email.com</p>
             </div>
         </div>
-        <Link href="/login" legacyBehavior passHref>
-          <Button variant="outline" className="w-full justify-center group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:w-auto group-data-[collapsible=icon]:aspect-square">
-            <span className="group-data-[collapsible=icon]:hidden">Cerrar Sesión</span>
-            <User className="hidden group-data-[collapsible=icon]:block" />
-          </Button>
+        <Link href="/login">
+            <Button asChild variant="outline" className="w-full justify-center group-data-[collapsible=icon]:justify-start group-data-[collapsible=icon]:w-auto group-data-[collapsible=icon]:aspect-square">
+                <div>
+                    <span className="group-data-[collapsible=icon]:hidden">Cerrar Sesión</span>
+                    <User className="hidden group-data-[collapsible=icon]:block" />
+                </div>
+            </Button>
         </Link>
       </SidebarFooter>
     </Sidebar>
