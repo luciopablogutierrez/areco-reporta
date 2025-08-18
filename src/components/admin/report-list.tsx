@@ -9,7 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { mockReports } from "@/lib/mock-data"
-import type { ReportStatus } from "@/types"
+import type { ReportStatus, ReportPriority } from "@/types"
 import { formatDistanceToNow } from "date-fns"
 import { es } from "date-fns/locale"
 
@@ -18,6 +18,20 @@ const statusVariant: Record<ReportStatus, "default" | "secondary" | "destructive
     in_progress: 'secondary',
     resolved: 'default',
     rejected: 'outline'
+};
+
+const statusText: Record<ReportStatus, string> = {
+    pending: 'Pendiente',
+    in_progress: 'En Proceso',
+    resolved: 'Resuelto',
+    rejected: 'Rechazado'
+};
+
+const priorityText: Record<ReportPriority, string> = {
+    low: 'Baja',
+    medium: 'Media',
+    high: 'Alta',
+    urgent: 'Urgente'
 };
 
 export function ReportList() {
@@ -41,9 +55,9 @@ export function ReportList() {
               <TableRow key={report.id}>
                 <TableCell className="font-medium">{report.title}</TableCell>
                 <TableCell>
-                  <Badge variant={statusVariant[report.status]}>{report.status.replace('_', ' ')}</Badge>
+                  <Badge variant={statusVariant[report.status]}>{statusText[report.status]}</Badge>
                 </TableCell>
-                <TableCell className="capitalize">{report.priority}</TableCell>
+                <TableCell>{priorityText[report.priority]}</TableCell>
                 <TableCell>{formatDistanceToNow(report.createdAt.toDate(), { addSuffix: true, locale: es })}</TableCell>
               </TableRow>
             ))}
