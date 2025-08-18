@@ -1,6 +1,7 @@
+
 "use server";
 
-import { checkMessageRelevanceFlow } from "@/ai/flows/checkMessageRelevance";
+import { checkMessageRelevance } from "@/ai/flows/checkMessageRelevance";
 import { z } from "zod";
 
 const schema = z.object({
@@ -14,7 +15,7 @@ type State = {
   message?: string | null;
 };
 
-export async function checkRelevance(
+export async function checkRelevanceAction(
   prevState: State | undefined,
   formData: FormData
 ): Promise<State> {
@@ -29,9 +30,7 @@ export async function checkRelevance(
   }
 
   try {
-    const result = await checkMessageRelevanceFlow.run({
-      message: validatedFields.data.message,
-    });
+    const result = await checkMessageRelevance(validatedFields.data.message);
     return {
       isRelevant: result.isRelevant,
       reason: result.reason,

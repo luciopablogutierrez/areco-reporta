@@ -1,15 +1,27 @@
-import {defineFlow} from 'genkit';
+
+'use server';
+
 import {z} from 'zod';
 import {ai} from '../genkit';
 
-export const checkMessageRelevanceFlow = defineFlow(
+const CheckMessageRelevanceInputSchema = z.object({
+  message: z.string(),
+});
+
+const CheckMessageRelevanceOutputSchema = z.object({
+  isRelevant: z.boolean(),
+  reason: z.string(),
+});
+
+export async function checkMessageRelevance(message: string) {
+  return await checkMessageRelevanceFlow({message});
+}
+
+const checkMessageRelevanceFlow = ai.defineFlow(
   {
     name: 'checkMessageRelevanceFlow',
-    inputSchema: z.object({message: z.string()}),
-    outputSchema: z.object({
-      isRelevant: z.boolean(),
-      reason: z.string(),
-    }),
+    inputSchema: CheckMessageRelevanceInputSchema,
+    outputSchema: CheckMessageRelevanceOutputSchema,
   },
   async ({message}) => {
     try {
@@ -27,10 +39,7 @@ export const checkMessageRelevanceFlow = defineFlow(
         },
         output: {
           format: 'json',
-          schema: z.object({
-            isRelevant: z.boolean(),
-            reason: z.string(),
-          }),
+          schema: CheckMessageRelevanceOutputSchema,
         },
       });
 

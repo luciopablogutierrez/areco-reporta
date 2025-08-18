@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
-import { checkRelevance } from "@/app/(dashboard)/admin/actions";
+import { checkRelevanceAction } from "@/app/(dashboard)/admin/actions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,7 +24,7 @@ export function MessageChecker() {
     message: null,
     error: null,
   };
-  const [state, dispatch] = useFormState(checkRelevance, initialState);
+  const [state, dispatch] = useFormState(checkRelevanceAction, initialState);
 
   return (
     <Card>
