@@ -15,8 +15,10 @@ import {
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem
 } from "@/components/ui/dropdown-menu"
-import type { ReportStatus } from "@/types"
+import type { ReportCategory, ReportStatus } from "@/types"
 import { Card } from "../ui/card"
+import { useFilterStore } from "@/store/filters"
+import { categoryText } from "@/lib/i18n"
 
 const statusOptions: { value: ReportStatus; label: string }[] = [
   { value: "pending", label: "Pendiente" },
@@ -25,38 +27,38 @@ const statusOptions: { value: ReportStatus; label: string }[] = [
   { value: "rejected", label: "Rechazado" },
 ]
 
-interface MapFiltersProps {
-  onFilterChange: (statuses: ReportStatus[]) => void;
-  onSearchChange: (term: string) => void;
-}
+const categoryOptions: { value: ReportCategory; label: string }[] = Object.entries(categoryText).map(([value, label]) => ({
+  value: value as ReportCategory,
+  label,
+}));
 
-export function MapFilters({ onFilterChange, onSearchChange }: MapFiltersProps) {
-    const [selectedStatuses, setSelectedStatuses] = React.useState<ReportStatus[]>([]);
-
-    const handleStatusChange = (status: ReportStatus) => {
-        const newStatuses = selectedStatuses.includes(status)
-            ? selectedStatuses.filter((s) => s !== status)
-            : [...selectedStatuses, status];
-        setSelectedStatuses(newStatuses);
-        onFilterChange(newStatuses);
-    };
+export function MapFilters() {
+    const { 
+        searchTerm, 
+        selectedStatuses, 
+        selectedCategories, 
+        setSearchTerm, 
+        toggleStatus,
+        toggleCategory
+    } = useFilterStore();
 
   return (
-    <Card className="absolute top-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-md p-2">
+    <Card className="absolute top-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-lg p-2">
         <div className="flex items-center gap-2">
             <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                     placeholder="Buscar incidencias..."
                     className="pl-10"
-                    onChange={(e) => onSearchChange(e.target.value)}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                 />
             </div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="flex-shrink-0">
                     <Filter className="mr-2 h-4 w-4" />
-                    Filtrar
+                    Filtrar Estado
                 </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
@@ -67,7 +69,29 @@ export function MapFilters({ onFilterChange, onSearchChange }: MapFiltersProps) 
                         key={option.value}
                         checked={selectedStatuses.includes(option.value)}
                         onSelect={(e) => e.preventDefault()}
-                        onCheckedChange={() => handleStatusChange(option.value)}
+                        onCheckedChange={() => toggleStatus(option.value)}
+                    >
+                        {option.label}
+                    </DropdownMenuCheckboxItem>
+                ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
+             <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="flex-shrink-0">
+                    <Filter className="mr-2 h-4 w-4" />
+                    Filtrar Categoría
+                </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Filtrar por categoría</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {categoryOptions.map((option) => (
+                    <DropdownMenuCheckboxItem
+                        key={option.value}
+                        checked={selectedCategories.includes(option.value)}
+                        onSelect={(e) => e.preventDefault()}
+                        onCheckedChange={() => toggleCategory(option.value)}
                     >
                         {option.label}
                     </DropdownMenuCheckboxItem>

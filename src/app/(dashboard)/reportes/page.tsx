@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import type { Report, ReportCategory, ReportStatus } from '@/types';
 import Link from 'next/link';
 import { categoryText, statusText } from '@/lib/i18n';
+import { useFilterStore } from '@/store/filters';
 
 const statusOptions: { value: ReportStatus; label: string }[] = [
   { value: "pending", label: "Pendiente" },
@@ -26,9 +27,14 @@ const categoryOptions: { value: ReportCategory; label: string }[] = Object.entri
 
 
 export default function ReportesPage() {
-    const [searchTerm, setSearchTerm] = React.useState('');
-    const [selectedStatuses, setSelectedStatuses] = React.useState<ReportStatus[]>([]);
-    const [selectedCategories, setSelectedCategories] = React.useState<ReportCategory[]>([]);
+    const { 
+        searchTerm, 
+        selectedStatuses, 
+        selectedCategories, 
+        setSearchTerm, 
+        toggleStatus, 
+        toggleCategory 
+    } = useFilterStore();
 
   // In a real app, this would fetch reports for the logged-in user
   const userReports = mockReports.filter(r => r.userId === 'user1' || r.userId === 'user2');
@@ -58,20 +64,6 @@ export default function ReportesPage() {
         return true;
       });
   }, [userReports, searchTerm, selectedStatuses, selectedCategories]);
-
-  const handleStatusChange = (status: ReportStatus) => {
-    const newStatuses = selectedStatuses.includes(status)
-      ? selectedStatuses.filter(s => s !== status)
-      : [...selectedStatuses, status];
-    setSelectedStatuses(newStatuses);
-  };
-
-  const handleCategoryChange = (category: ReportCategory) => {
-    const newCategories = selectedCategories.includes(category)
-      ? selectedCategories.filter(c => c !== category)
-      : [...selectedCategories, category];
-    setSelectedCategories(newCategories);
-  };
 
   return (
     <div className="space-y-8">
@@ -113,7 +105,7 @@ export default function ReportesPage() {
                         <DropdownMenuCheckboxItem
                             key={option.value}
                             checked={selectedStatuses.includes(option.value)}
-                            onCheckedChange={() => handleStatusChange(option.value)}
+                            onCheckedChange={() => toggleStatus(option.value)}
                              onSelect={(e) => e.preventDefault()}
                         >
                             {option.label}
@@ -133,7 +125,7 @@ export default function ReportesPage() {
                         <DropdownMenuCheckboxItem
                             key={option.value}
                             checked={selectedCategories.includes(option.value)}
-                            onCheckedChange={() => handleCategoryChange(option.value)}
+                            onCheckedChange={() => toggleCategory(option.value)}
                              onSelect={(e) => e.preventDefault()}
                         >
                             {option.label}

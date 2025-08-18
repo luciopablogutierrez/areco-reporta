@@ -1,22 +1,21 @@
 
 'use client'
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { mockReports } from '@/lib/mock-data';
 import { MapFilters } from '@/components/map/map-filters';
-import type { Report, ReportStatus } from '@/types';
+import type { Report, ReportCategory, ReportStatus } from '@/types';
+import { useFilterStore } from '@/store/filters';
 
 const ReportsMap = dynamic(() => import('@/components/map/reports-map'), {
   ssr: false,
 });
 
 export default function MapaPage() {
-  const [reports, setReports] = useState<Report[]>(mockReports);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatuses, setSelectedStatuses] = useState<ReportStatus[]>([]);
-
+  const { searchTerm, selectedStatuses, selectedCategories, setSearchTerm, setSelectedStatuses, setSelectedCategories } = useFilterStore();
+  
   const filteredReports = useMemo(() => {
-    return reports
+    return mockReports
       .filter(report => {
         // Filter by search term (title or description)
         if (searchTerm) {
@@ -34,22 +33,21 @@ export default function MapaPage() {
           return selectedStatuses.includes(report.status);
         }
         return true;
+      })
+      .filter(report => {
+        // Filter by category
+        if (selectedCategories.length > 0) {
+            return selectedCategories.includes(report.category);
+        }
+        return true;
       });
-  }, [reports, searchTerm, selectedStatuses]);
-
-  const handleFilterChange = (statuses: ReportStatus[]) => {
-    setSelectedStatuses(statuses);
-  };
-
-  const handleSearchChange = (term: string) => {
-    setSearchTerm(term);
-  };
+  }, [mockReports, searchTerm, selectedStatuses, selectedCategories]);
 
   return (
     <div className="relative h-[calc(100vh-4rem)] w-full">
-      <MapFilters onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
+      <MapFilters />
       <div className="absolute inset-0 z-0">
-        <ReportsMap reports={filteredReports} center={[-34.23, -59.48]} zoom={11} className="h-full w-full" />
+        <ReportsMap reports={filteredReports} center={[-34.45, -59.5]} zoom={10} className="h-full w-full" />
       </div>
     </div>
   );
