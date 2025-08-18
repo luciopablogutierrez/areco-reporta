@@ -13,7 +13,7 @@ export default function AdminPage() {
             <Shield className="w-8 h-8 text-primary"/>
             Panel de Administración
         </h1>
-        <p className="text-muted-foreground">Métricas y gestión de reportes de Vecinos Activos Areco.</p>
+        <p className="text-muted-foreground">Métricas y gestión de reportes de ArecoReporta.</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

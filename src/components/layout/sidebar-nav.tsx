@@ -36,7 +36,7 @@ export function SidebarNav() {
                 <div className="p-2 rounded-lg bg-primary text-primary-foreground">
                     <Home className="w-6 h-6"/>
                 </div>
-                <h1 className="text-xl font-bold text-primary group-data-[collapsible=icon]:hidden">Vecinos Activos Areco</h1>
+                <h1 className="text-xl font-bold text-primary group-data-[collapsible=icon]:hidden">ArecoReporta</h1>
             </div>
             <SidebarTrigger className="group-data-[collapsible=icon]:hidden" />
         </SidebarHeader>

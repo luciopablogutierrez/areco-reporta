@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: 'Vecinos Activos Areco',
+  title: 'ArecoReporta',
   description: 'Reportes ciudadanos para mejorar tu ciudad.',
 };
 
