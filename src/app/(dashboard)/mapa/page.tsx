@@ -46,10 +46,10 @@ export default function MapaPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)]">
+    <div className="relative h-[calc(100vh-4rem)] w-full">
       <MapFilters onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
-      <div className="flex-grow w-full h-full">
-        <ReportsMap reports={filteredReports} center={[-34.23, -59.48]} zoom={11} className="h-full w-full rounded-lg shadow-lg" />
+      <div className="absolute inset-0 z-0">
+        <ReportsMap reports={filteredReports} center={[-34.23, -59.48]} zoom={11} className="h-full w-full" />
       </div>
     </div>
   );
