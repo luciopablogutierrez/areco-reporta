@@ -96,7 +96,7 @@ export default function CrearIncidenciaPage() {
                     <CardTitle>Detalles de la Incidencia</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <div className="space-y-2">
+                    <div className="space-y-2 relative">
                         <Label htmlFor="location">Ubicación de la incidencia *</Label>
                         <div className="relative">
                             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -114,8 +114,8 @@ export default function CrearIncidenciaPage() {
                             </div>
                         </div>
                         {addressResults.length > 0 && (
-                            <div className="relative">
-                                <ul className="absolute z-10 w-full bg-card border rounded-md shadow-lg mt-1 max-h-60 overflow-y-auto">
+                            <div className="absolute z-10 w-full mt-1">
+                                <ul className="w-full bg-card border rounded-md shadow-lg max-h-60 overflow-y-auto">
                                     {addressResults.map((result) => (
                                         <li 
                                             key={result.place_id} 
@@ -129,12 +129,12 @@ export default function CrearIncidenciaPage() {
                             </div>
                         )}
                          {selectedLocation && (
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-xs text-muted-foreground pt-2">
                                 Coordenadas seleccionadas: {selectedLocation.lat.toFixed(5)}, {selectedLocation.lng.toFixed(5)}
                             </p>
                         )}
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2 pt-4">
                         <Label htmlFor="address-details">Detalles de la dirección</Label>
                         <Input id="address-details" placeholder="Por ejemplo: En la zona de aparcamiento (opcional)" />
                     </div>
