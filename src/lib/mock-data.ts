@@ -9,10 +9,10 @@ const createTimestamp = (): { toDate: () => Date } => ({
 });
 
 const locations = {
-  "San Antonio de Areco": { lat: -34.246, lng: -59.479, name: "San Antonio de Areco" },
-  "Villa Lía": { lat: -34.185, lng: -59.335, name: "Villa Lía" },
-  "Duggan": { lat: -34.206544, lng: -59.639175, name: "Duggan" },
-  "Vagues": { lat: -34.285, lng: -59.475, name: "Vagues" },
+  "san_antonio_de_areco": { lat: -34.246, lng: -59.479, name: "San Antonio de Areco", tag: "san_antonio_de_areco" },
+  "villa_lia": { lat: -34.185, lng: -59.335, name: "Villa Lía", tag: "villa_lia" },
+  "duggan": { lat: -34.206544, lng: -59.639175, name: "Duggan", tag: "duggan" },
+  "vagues": { lat: -34.285, lng: -59.475, name: "Vagues", tag: "vagues" },
 };
 
 const categories: ReportCategory[] = ['baches', 'alumbrado', 'basura', 'senalizacion', 'espacios_verdes', 'infraestructura', 'otros'];
@@ -32,7 +32,7 @@ const reportTemplates = {
 
 const getRandomElement = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
-const generateReportsForLocation = (location: { lat: number, lng: number, name: string }, count: number, startId: number): Report[] => {
+const generateReportsForLocation = (location: { lat: number, lng: number, name: string, tag: string }, count: number, startId: number): Report[] => {
   const reports: Report[] = [];
   for (let i = 0; i < count; i++) {
     const id = startId + i;
@@ -59,7 +59,7 @@ const generateReportsForLocation = (location: { lat: number, lng: number, name: 
       municipalityId: "areco",
       upvotes: Math.floor(Math.random() * 50),
       upvotedBy: [],
-      tags: [location.name.toLowerCase().replace(/ /g, '_'), category],
+      tags: [location.tag, category],
       createdAt: createTimestamp(),
       updatedAt: createTimestamp(),
     });
@@ -68,8 +68,8 @@ const generateReportsForLocation = (location: { lat: number, lng: number, name: 
 };
 
 export const mockReports: Report[] = [
-  ...generateReportsForLocation(locations["San Antonio de Areco"], 50, 1),
-  ...generateReportsForLocation(locations["Villa Lía"], 50, 51),
-  ...generateReportsForLocation(locations["Duggan"], 50, 101),
-  ...generateReportsForLocation(locations["Vagues"], 50, 151),
+  ...generateReportsForLocation(locations["san_antonio_de_areco"], 50, 1),
+  ...generateReportsForLocation(locations["villa_lia"], 50, 51),
+  ...generateReportsForLocation(locations["duggan"], 50, 101),
+  ...generateReportsForLocation(locations["vagues"], 50, 151),
 ];
