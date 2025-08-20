@@ -23,4 +23,18 @@ export const categoryText: Record<ReportCategory, string> = {
     espacios_verdes: 'Espacios Verdes',
     infraestructura: 'Infraestructura',
     otros: 'Otros'
-}
+};
+
+export const locationText = {
+    san_antonio_de_areco: 'San Antonio de Areco',
+    villa_lia: 'Villa Lía',
+    vagues: 'Vagues',
+    duggan: 'Duggan'
+};
+
+export const locationTagMap = {
+    san_antonio_de_areco: 'san_antonio_de_areco',
+    villa_lia: 'villa_lia',
+    vagues: 'vagues',
+    duggan: 'duggan'
+};

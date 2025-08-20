@@ -6,13 +6,14 @@ import { mockReports } from '@/lib/mock-data';
 import { MapFilters } from '@/components/map/map-filters';
 import type { Report, ReportCategory, ReportStatus } from '@/types';
 import { useFilterStore } from '@/store/filters';
+import { locationTagMap } from '@/lib/i18n';
 
 const ReportsMap = dynamic(() => import('@/components/map/reports-map'), {
   ssr: false,
 });
 
 export default function MapaPage() {
-  const { searchTerm, selectedStatuses, selectedCategories, setSearchTerm, setSelectedStatuses, setSelectedCategories } = useFilterStore();
+  const { searchTerm, selectedStatuses, selectedCategories, selectedLocation } = useFilterStore();
   
   const filteredReports = useMemo(() => {
     return mockReports
@@ -40,8 +41,15 @@ export default function MapaPage() {
             return selectedCategories.includes(report.category);
         }
         return true;
+      })
+      .filter(report => {
+        // Filter by location
+        if (selectedLocation) {
+          return report.tags.includes(locationTagMap[selectedLocation]);
+        }
+        return true;
       });
-  }, [mockReports, searchTerm, selectedStatuses, selectedCategories]);
+  }, [mockReports, searchTerm, selectedStatuses, selectedCategories, selectedLocation]);
 
   return (
     <div className="relative h-[calc(100vh-4rem)] w-full">

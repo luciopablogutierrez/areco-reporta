@@ -3,13 +3,13 @@
 import * as React from 'react';
 import { ReportCard } from "@/components/reports/report-card";
 import { mockReports } from "@/lib/mock-data";
-import { FileText, PlusCircle, Search } from "lucide-react";
+import { FileText, PlusCircle, Search, MapPin, X } from "lucide-react";
 import { Input } from '@/components/ui/input';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import type { Report, ReportCategory, ReportStatus } from '@/types';
 import Link from 'next/link';
-import { categoryText, statusText } from '@/lib/i18n';
+import { categoryText, statusText, locationText, locationTagMap } from '@/lib/i18n';
 import { useFilterStore } from '@/store/filters';
 
 const statusOptions: { value: ReportStatus; label: string }[] = [
@@ -24,15 +24,22 @@ const categoryOptions: { value: ReportCategory; label: string }[] = Object.entri
   label,
 }));
 
+const locationOptions = Object.entries(locationText).map(([value, label]) => ({
+    value: value as keyof typeof locationText,
+    label,
+}));
+
 
 export default function ReportesPage() {
     const { 
         searchTerm, 
         selectedStatuses, 
         selectedCategories, 
+        selectedLocation,
         setSearchTerm, 
         toggleStatus, 
-        toggleCategory 
+        toggleCategory,
+        setSelectedLocation
     } = useFilterStore();
     
     // In a real app, this would be fetched state
@@ -84,8 +91,15 @@ export default function ReportesPage() {
           return selectedCategories.includes(report.category);
         }
         return true;
+      })
+      .filter(report => {
+        // Filter by location
+        if (selectedLocation) {
+          return report.tags.includes(locationTagMap[selectedLocation]);
+        }
+        return true;
       });
-  }, [userReports, searchTerm, selectedStatuses, selectedCategories]);
+  }, [userReports, searchTerm, selectedStatuses, selectedCategories, selectedLocation]);
 
   return (
     <div className="space-y-8">
@@ -116,6 +130,35 @@ export default function ReportesPage() {
                 />
             </div>
             <div className="flex gap-2 w-full md:w-auto">
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-full">
+                        <MapPin className="mr-2 h-4 w-4" />
+                        {selectedLocation ? locationText[selectedLocation] : "Zona"}
+                    </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Filtrar por Zona</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuRadioGroup value={selectedLocation ?? ""} onValueChange={(value) => setSelectedLocation(value as any)}>
+                        {locationOptions.map((option) => (
+                            <DropdownMenuRadioItem key={option.value} value={option.value}>
+                                {option.label}
+                            </DropdownMenuRadioItem>
+                        ))}
+                    </DropdownMenuRadioGroup>
+                    {selectedLocation && (
+                        <>
+                            <DropdownMenuSeparator />
+                            <Button variant="ghost" className="w-full justify-start" size="sm" onClick={() => setSelectedLocation(null)}>
+                                <X className="mr-2 h-4 w-4"/>
+                                Limpiar filtro
+                            </Button>
+                        </>
+                    )}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                     <Button variant="outline" className="w-full">Filtrar por Estado</Button>
