@@ -1,3 +1,4 @@
+
 'use client';
 
 import { create } from 'zustand';
@@ -16,6 +17,7 @@ interface FilterState {
   setSelectedLocation: (location: Location | null) => void;
   toggleStatus: (status: ReportStatus) => void;
   toggleCategory: (category: ReportCategory) => void;
+  clearFilters: () => void;
 }
 
 export const useFilterStore = create<FilterState>((set) => ({
@@ -39,4 +41,12 @@ export const useFilterStore = create<FilterState>((set) => ({
         ? state.selectedCategories.filter((c) => c !== category)
         : [...state.selectedCategories, category],
     })),
+  clearFilters: () =>
+    set({
+      searchTerm: '',
+      selectedStatuses: [],
+      selectedCategories: [],
+      selectedLocation: null,
+    }),
 }));
+
