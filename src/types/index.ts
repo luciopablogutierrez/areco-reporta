@@ -31,7 +31,7 @@ export interface User {
 }
 
 export type ReportStatus = 'pending' | 'in_progress' | 'resolved' | 'rejected';
-export type ReportCategory = 'baches' | 'alumbrado' | 'basura' | 'senalizacion' | 'espacios_verdes' | 'infraestructura' | 'otros';
+export type ReportCategory = 'baches' | 'alumbrado' | 'basura' | 'senalizacion' | 'espacios_verdes' | 'infraestructura' | 'accesibilidad' | 'otros';
 export type ReportPriority = 'low' | 'medium' | 'high' | 'urgent';
 
 export interface Report {

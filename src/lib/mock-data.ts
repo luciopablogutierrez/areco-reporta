@@ -15,7 +15,7 @@ const locations = {
   "vagues": { lat: -34.285, lng: -59.475, name: "Vagues", tag: "vagues" },
 };
 
-const categories: ReportCategory[] = ['baches', 'alumbrado', 'basura', 'senalizacion', 'espacios_verdes', 'infraestructura', 'otros'];
+const categories: ReportCategory[] = ['baches', 'alumbrado', 'basura', 'senalizacion', 'espacios_verdes', 'infraestructura', 'accesibilidad', 'otros'];
 const statuses: ReportStatus[] = ['pending', 'in_progress', 'resolved', 'rejected'];
 const priorities: ReportPriority[] = ['low', 'medium', 'high', 'urgent'];
 const userIds = ['user1', 'user2', 'user3', 'user4', 'user5'];
@@ -27,6 +27,7 @@ const reportTemplates = {
     senalizacion: (loc: string) => ({ title: `Señal de tránsito dañada en ${loc}`, description: `Una señal de 'PARE' fue vandalizada y es ilegible, generando un riesgo en ${loc}.` }),
     espacios_verdes: (loc: string) => ({ title: `Pasto muy alto en plaza de ${loc}`, description: `El césped de la plaza de ${loc} no se corta hace semanas y está muy descuidado.` }),
     infraestructura: (loc: string) => ({ title: `Vereda rota en ${loc}`, description: `La vereda de la calle principal de ${loc} está rota y es peligrosa para los peatones.` }),
+    accesibilidad: (loc: string) => ({ title: `Rampa de esquina inaccesible en ${loc}`, description: `La rampa para sillas de ruedas en la esquina céntrica de ${loc} está obstruida o en mal estado.` }),
     otros: (loc: string) => ({ title: `Problema vario en ${loc}`, description: `Se reporta un problema de mantenimiento general en la zona comercial de ${loc}.` }),
 };
 

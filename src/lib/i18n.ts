@@ -22,6 +22,7 @@ export const categoryText: Record<ReportCategory, string> = {
     senalizacion: 'Señalización',
     espacios_verdes: 'Espacios Verdes',
     infraestructura: 'Infraestructura',
+    accesibilidad: 'Accesibilidad',
     otros: 'Otros'
 };
 
