@@ -20,6 +20,14 @@ const statuses: ReportStatus[] = ['pending', 'in_progress', 'resolved', 'rejecte
 const priorities: ReportPriority[] = ['low', 'medium', 'high', 'urgent'];
 const userIds = ['user1', 'user2', 'user3', 'user4', 'user5'];
 
+const rejectionReasons = [
+  "Reporte duplicado. Ya existe una incidencia para este problema.",
+  "Información insuficiente para verificar el problema.",
+  "El problema reportado no corresponde a una responsabilidad municipal.",
+  "La incidencia ya fue resuelta anteriormente.",
+  "Fuera del área de cobertura de servicios."
+];
+
 const reportTemplates = {
     baches: (loc: string) => ({ title: `Bache en calle principal de ${loc}`, description: `Hay un bache peligroso en una de las calles céntricas de ${loc} que necesita reparación.` }),
     alumbrado: (loc: string) => ({ title: `Poste de luz sin funcionar en ${loc}`, description: `Un poste de alumbrado público lleva varios días sin funcionar en ${loc}, dejando la zona a oscuras.` }),
@@ -39,12 +47,13 @@ const generateReportsForLocation = (location: { lat: number, lng: number, name: 
     const id = startId + i;
     const category = getRandomElement(categories);
     const template = reportTemplates[category](location.name);
+    const status = getRandomElement(statuses);
     
     // Create slightly different coordinates for each report
     const newLat = location.lat + (Math.random() - 0.5) * 0.01;
     const newLng = location.lng + (Math.random() - 0.5) * 0.01;
 
-    reports.push({
+    const report: Report = {
       id: `${id}`,
       title: template.title,
       description: template.description,
@@ -53,7 +62,7 @@ const generateReportsForLocation = (location: { lat: number, lng: number, name: 
       address: `${location.name}, Buenos Aires`,
       coordinates: { lat: newLat, lng: newLng },
       images: [`https://placehold.co/600x400.png?text=${encodeURIComponent(location.name)}+${i+1}`],
-      status: getRandomElement(statuses),
+      status,
       priority: getRandomElement(priorities),
       isPublic: Math.random() > 0.2,
       userId: getRandomElement(userIds),
@@ -63,7 +72,13 @@ const generateReportsForLocation = (location: { lat: number, lng: number, name: 
       tags: [location.tag, category],
       createdAt: createTimestamp(),
       updatedAt: createTimestamp(),
-    });
+    };
+
+    if (status === 'rejected') {
+        report.rejectionReason = getRandomElement(rejectionReasons);
+    }
+
+    reports.push(report);
   }
   return reports;
 };

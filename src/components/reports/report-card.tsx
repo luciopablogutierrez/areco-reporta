@@ -3,11 +3,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { Clock, MapPin, Tag, ThumbsUp } from "lucide-react";
+import { Clock, MapPin, Tag, ThumbsUp, XCircle } from "lucide-react";
 import Image from "next/image";
 import { categoryText, statusText } from "@/lib/i18n";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 interface ReportCardProps {
   report: Report;
@@ -40,6 +41,15 @@ export function ReportCard({ report, onUpvote, isUpvoted }: ReportCardProps) {
             <div className="rounded-md overflow-hidden aspect-video relative">
                 <Image src={report.images[0]} alt={report.title} layout="fill" objectFit="cover" data-ai-hint="urban problem" />
             </div>
+        )}
+        {report.status === 'rejected' && report.rejectionReason && (
+            <Alert variant="destructive">
+                <XCircle className="h-4 w-4" />
+                <AlertTitle>Motivo del Rechazo</AlertTitle>
+                <AlertDescription>
+                    {report.rejectionReason}
+                </AlertDescription>
+            </Alert>
         )}
         <p className="text-sm text-muted-foreground">{report.description}</p>
       </CardContent>

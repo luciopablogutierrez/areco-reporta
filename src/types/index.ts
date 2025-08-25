@@ -45,6 +45,7 @@ export interface Report {
   coordinates: { lat: number; lng: number };
   images: string[]; // URLs de Storage
   status: ReportStatus;
+  rejectionReason?: string;
   priority: ReportPriority;
   isPublic: boolean;
   userId: string;
