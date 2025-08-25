@@ -18,7 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 
 const animalFormSchema = z.object({
@@ -88,6 +87,45 @@ export default function RegistroAnimalPage() {
                   </FormItem>
                 )}
               />
+              
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormLabel>Tipo de animal</FormLabel>
+                    <FormControl>
+                      <div className="flex gap-4">
+                        <Button
+                          type="button"
+                          variant={field.value === 'perro' ? 'default' : 'outline'}
+                          onClick={() => field.onChange('perro')}
+                          className="w-24"
+                        >
+                          Perro
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={field.value === 'gato' ? 'default' : 'outline'}
+                          onClick={() => field.onChange('gato')}
+                          className="w-24"
+                        >
+                          Gato
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={field.value === 'otro' ? 'default' : 'outline'}
+                          onClick={() => field.onChange('otro')}
+                          className="w-24"
+                        >
+                          Otro
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}
@@ -146,29 +184,6 @@ export default function RegistroAnimalPage() {
                     <FormControl>
                       <Input type="number" placeholder="Peso en kg" {...field} />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de animal</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un tipo" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="gato">Gato</SelectItem>
-                        <SelectItem value="perro">Perro</SelectItem>
-                        <SelectItem value="otro">Otro</SelectItem>
-                      </SelectContent>
-                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
