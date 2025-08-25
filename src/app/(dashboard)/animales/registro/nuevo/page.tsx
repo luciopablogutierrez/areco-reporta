@@ -25,7 +25,7 @@ const animalFormSchema = z.object({
   castrated: z.enum(["yes", "no"], { required_error: "Debe seleccionar una opción." }),
   breed: z.string().min(1, "La raza es obligatoria.").max(32, "La raza no puede tener más de 32 caracteres."),
   weight: z.string().optional(),
-  type: z.enum(["perro", "gato", "otro"], {
+  type: z.enum(["perro", "gato", "equino", "otro"], {
     required_error: "Debe seleccionar un tipo de animal.",
   }),
   color: z.string().optional(),
@@ -111,6 +111,14 @@ export default function RegistroAnimalPage() {
                           className="w-24"
                         >
                           Gato
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={field.value === 'equino' ? 'default' : 'outline'}
+                          onClick={() => field.onChange('equino')}
+                          className="w-24"
+                        >
+                          Equino
                         </Button>
                         <Button
                           type="button"
