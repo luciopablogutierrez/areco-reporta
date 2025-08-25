@@ -26,7 +26,7 @@ const animalFormSchema = z.object({
   castrated: z.enum(["yes", "no"], { required_error: "Debe seleccionar una opción." }),
   breed: z.string().min(1, "La raza es obligatoria.").max(32, "La raza no puede tener más de 32 caracteres."),
   weight: z.string().optional(),
-  type: z.enum(["perro", "gato", "equino"], {
+  type: z.enum(["perro", "gato", "otro"], {
     required_error: "Debe seleccionar un tipo de animal.",
   }),
   color: z.string().optional(),
@@ -164,9 +164,9 @@ export default function RegistroAnimalPage() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="equino">Equino</SelectItem>
                         <SelectItem value="gato">Gato</SelectItem>
                         <SelectItem value="perro">Perro</SelectItem>
+                        <SelectItem value="otro">Otro</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
