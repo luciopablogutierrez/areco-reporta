@@ -3,7 +3,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, FileText, Home, MapIcon, User, Shield, PlusCircle } from "lucide-react"
+import { Bell, FileText, Home, MapIcon, User, Shield, PlusCircle, Dog } from "lucide-react"
 
 import {
   Sidebar,
@@ -23,6 +23,7 @@ const menuItems = [
   { href: "/incidencias/crear", label: "Crear Incidencia", icon: PlusCircle },
   { href: "/reportes", label: "Mis Reportes", icon: FileText },
   { href: "/notificaciones", label: "Notificaciones", icon: Bell },
+  { href: "/animales", label: "Animales", icon: Dog },
   { href: "/admin", label: "Panel Admin", icon: Shield },
 ];
 
