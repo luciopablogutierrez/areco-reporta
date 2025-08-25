@@ -65,9 +65,11 @@ export default function MisAnimalesPage() {
             </main>
 
             <div className="fixed bottom-16 right-4">
-                <Button size="icon" className="rounded-full h-14 w-14 shadow-lg">
-                    <Plus className="h-8 w-8" />
-                </Button>
+                <Link href="/animales/registro/nuevo">
+                    <Button size="icon" className="rounded-full h-14 w-14 shadow-lg">
+                        <Plus className="h-8 w-8" />
+                    </Button>
+                </Link>
             </div>
         </div>
     );
