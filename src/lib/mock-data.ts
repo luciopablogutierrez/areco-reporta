@@ -1,4 +1,4 @@
-import type { Report, ReportCategory, ReportPriority, ReportStatus } from "@/types";
+import type { Report, ReportCategory, ReportPriority, ReportStatus, ReportUpdate } from "@/types";
 
 const createTimestamp = (): { toDate: () => Date } => ({
   toDate: () => {
@@ -7,6 +7,13 @@ const createTimestamp = (): { toDate: () => Date } => ({
     return date;
   },
 });
+
+const createFutureTimestamp = (days: number): { toDate: () => Date } => {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    return { toDate: () => date };
+};
+
 
 const locations = {
   "san_antonio_de_areco": { lat: -34.246, lng: -59.479, name: "San Antonio de Areco", tag: "san_antonio_de_areco" },
@@ -41,6 +48,41 @@ const reportTemplates = {
 
 const getRandomElement = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
+const generateHistory = (reportId: string, finalStatus: ReportStatus, createdAt: { toDate: () => Date }): ReportUpdate[] => {
+    const history: ReportUpdate[] = [];
+    const createdDate = createdAt.toDate();
+
+    if (finalStatus === 'in_progress' || finalStatus === 'resolved' || finalStatus === 'rejected') {
+        history.push({
+            id: `${reportId}-h1`,
+            reportId,
+            type: 'status_change',
+            message: 'El municipio está evaluando la incidencia.',
+            previousStatus: 'pending',
+            newStatus: 'in_progress',
+            userId: 'admin1',
+            isPublic: true,
+            createdAt: { toDate: () => new Date(createdDate.getTime() + 1000 * 60 * 60 * 24 * 2) } // 2 days later
+        });
+    }
+    
+    if (finalStatus === 'resolved' || finalStatus === 'rejected') {
+        history.push({
+            id: `${reportId}-h2`,
+            reportId,
+            type: 'status_change',
+            message: finalStatus === 'resolved' ? 'La incidencia ha sido resuelta.' : 'La incidencia fue rechazada.',
+            previousStatus: 'in_progress',
+            newStatus: finalStatus,
+            userId: 'admin2',
+            isPublic: true,
+            createdAt: { toDate: () => new Date(createdDate.getTime() + 1000 * 60 * 60 * 24 * 5) } // 5 days later
+        });
+    }
+
+    return history;
+}
+
 const generateReportsForLocation = (location: { lat: number, lng: number, name: string, tag: string }, count: number, startId: number): Report[] => {
   const reports: Report[] = [];
   for (let i = 0; i < count; i++) {
@@ -52,6 +94,7 @@ const generateReportsForLocation = (location: { lat: number, lng: number, name: 
     // Create slightly different coordinates for each report
     const newLat = location.lat + (Math.random() - 0.5) * 0.01;
     const newLng = location.lng + (Math.random() - 0.5) * 0.01;
+    const createdAt = createTimestamp();
 
     const report: Report = {
       id: `${id}`,
@@ -70,8 +113,9 @@ const generateReportsForLocation = (location: { lat: number, lng: number, name: 
       upvotes: Math.floor(Math.random() * 50),
       upvotedBy: [],
       tags: [location.tag, category],
-      createdAt: createTimestamp(),
+      createdAt: createdAt,
       updatedAt: createTimestamp(),
+      history: generateHistory(`${id}`, status, createdAt),
     };
 
     if (status === 'rejected') {

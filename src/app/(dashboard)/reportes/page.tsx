@@ -1,4 +1,5 @@
 
+
 'use client'
 
 import * as React from 'react';
@@ -13,6 +14,7 @@ import Link from 'next/link';
 import { categoryText, statusText, locationText, locationTagMap } from '@/lib/i18n';
 import { useFilterStore } from '@/store/filters';
 import { Badge } from '@/components/ui/badge';
+import { StateGraphDialog } from '@/components/reports/state-graph-dialog';
 
 const statusOptions: { value: ReportStatus; label: string }[] = [
   { value: "pending", label: "Pendiente" },
@@ -47,6 +49,7 @@ export default function ReportesPage() {
     
     // In a real app, this would be fetched state
     const [reports, setReports] = React.useState<Report[]>(mockReports);
+    const [selectedReportForGraph, setSelectedReportForGraph] = React.useState<Report | null>(null);
 
     const handleUpvote = (reportId: string, userId: string = 'user1') => {
         setReports(prevReports => {
@@ -66,6 +69,10 @@ export default function ReportesPage() {
             });
             return newReports;
         });
+    };
+
+    const handleStatusDoubleClick = (report: Report) => {
+        setSelectedReportForGraph(report);
     };
 
   // In a real app, this would fetch reports for the logged-in user
@@ -107,6 +114,7 @@ export default function ReportesPage() {
   const activeFiltersCount = selectedStatuses.length + selectedCategories.length + (selectedLocation ? 1 : 0) + (searchTerm ? 1 : 0);
 
   return (
+    <>
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
@@ -264,6 +272,7 @@ export default function ReportesPage() {
                 report={report} 
                 onUpvote={() => handleUpvote(report.id)}
                 isUpvoted={report.upvotedBy.includes('user1')}
+                onStatusDoubleClick={handleStatusDoubleClick}
             />
           ))}
         </div>
@@ -274,6 +283,19 @@ export default function ReportesPage() {
         </div>
       )}
     </div>
+    {selectedReportForGraph && (
+        <StateGraphDialog
+            report={selectedReportForGraph}
+            open={!!selectedReportForGraph}
+            onOpenChange={(open) => {
+                if (!open) {
+                    setSelectedReportForGraph(null);
+                }
+            }}
+        />
+    )}
+    </>
   );
 }
+
 

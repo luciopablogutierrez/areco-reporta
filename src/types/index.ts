@@ -58,6 +58,7 @@ export interface Report {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   resolvedAt?: Timestamp;
+  history?: ReportUpdate[];
 }
 
 interface Category {
