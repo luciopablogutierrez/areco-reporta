@@ -32,7 +32,7 @@ export default function AnimalesPage() {
                 </Card>
 
                 <Card className="hover:bg-primary/5 transition-colors">
-                    <Link href="#">
+                    <Link href="/animales/registro">
                         <div className="flex items-center p-6">
                             <BookMarked className="w-8 h-8 mr-6 text-primary"/>
                             <div className="flex-grow">
