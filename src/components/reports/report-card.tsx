@@ -14,7 +14,7 @@ interface ReportCardProps {
   report: Report;
   onUpvote?: () => void;
   isUpvoted?: boolean;
-  onStatusDoubleClick?: (report: Report) => void;
+  onStatusClick?: (report: Report) => void;
 }
 
 const statusVariant: Record<ReportStatus, "default" | "secondary" | "destructive" | "outline"> = {
@@ -25,13 +25,13 @@ const statusVariant: Record<ReportStatus, "default" | "secondary" | "destructive
 };
 
 
-export function ReportCard({ report, onUpvote, isUpvoted, onStatusDoubleClick }: ReportCardProps) {
+export function ReportCard({ report, onUpvote, isUpvoted, onStatusClick }: ReportCardProps) {
   return (
     <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg">
       <CardHeader>
         <div className="flex justify-between items-start gap-4">
             <CardTitle className="text-lg">{report.title}</CardTitle>
-            <div onDoubleClick={() => onStatusDoubleClick?.(report)} className="cursor-pointer">
+            <div onClick={() => onStatusClick?.(report)} className="cursor-pointer">
               <Badge variant={statusVariant[report.status]}>{statusText[report.status]}</Badge>
             </div>
         </div>

@@ -71,7 +71,7 @@ export default function ReportesPage() {
         });
     };
 
-    const handleStatusDoubleClick = (report: Report) => {
+    const handleStatusClick = (report: Report) => {
         setSelectedReportForGraph(report);
     };
 
@@ -272,7 +272,7 @@ export default function ReportesPage() {
                 report={report} 
                 onUpvote={() => handleUpvote(report.id)}
                 isUpvoted={report.upvotedBy.includes('user1')}
-                onStatusDoubleClick={handleStatusDoubleClick}
+                onStatusClick={handleStatusClick}
             />
           ))}
         </div>
@@ -297,5 +297,3 @@ export default function ReportesPage() {
     </>
   );
 }
-
-
