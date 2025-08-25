@@ -22,8 +22,8 @@ const menuItems = [
   { href: "/mapa", label: "Mapa Interactivo", icon: MapIcon },
   { href: "/incidencias/crear", label: "Crear Incidencia", icon: PlusCircle },
   { href: "/reportes", label: "Mis Reportes", icon: FileText },
-  { href: "/notificaciones", label: "Notificaciones", icon: Bell },
   { href: "/animales", label: "Animales", icon: Dog },
+  { href: "/notificaciones", label: "Notificaciones", icon: Bell },
   { href: "/admin", label: "Panel Admin", icon: Shield },
 ];
 
