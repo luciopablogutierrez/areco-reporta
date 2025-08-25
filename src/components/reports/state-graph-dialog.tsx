@@ -9,10 +9,11 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import type { Report, ReportUpdate } from "@/types";
-import { ChevronRight, Circle } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { statusText } from "@/lib/i18n";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 interface StateGraphDialogProps {
   report: Report;
@@ -41,42 +42,54 @@ export function StateGraphDialog({ report, open, onOpenChange }: StateGraphDialo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-3xl">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
-          <DialogTitle>Gráfico de Estados</DialogTitle>
+          <DialogTitle>Historial del Reporte</DialogTitle>
           <DialogDescription>
-            Historial de cambios para el reporte: "{report.title}"
+            Línea de tiempo de los cambios para el reporte: "{report.title}"
           </DialogDescription>
         </DialogHeader>
-        <div className="py-4">
-          <div className="overflow-x-auto pb-4">
-            <div className="flex items-start space-x-2">
-              {statusHistory.map((update, index) => (
-                <div key={index} className="flex items-start">
-                  <div className="flex flex-col items-center w-36">
-                    <div className={`p-2 rounded-md w-full ${index === statusHistory.length - 1 ? 'bg-primary/10 border-primary border' : 'bg-secondary'}`}>
-                      <div className="flex items-center gap-2 justify-center">
-                          <div className={`w-2.5 h-2.5 rounded-full ${statusColors[update.newStatus!] || 'bg-gray-400'}`} />
-                          <span className="text-sm font-medium">{statusText[update.newStatus as keyof typeof statusText]}</span>
-                      </div>
+        <ScrollArea className="w-full whitespace-nowrap">
+            <div className="relative py-4 px-2">
+                <div className="flex items-start gap-4">
+                {statusHistory.map((update, index) => (
+                    <div key={index} className="flex items-center">
+                    {/* State Node */}
+                    <div className="flex flex-col items-center flex-shrink-0">
+                        <div className={`border-2 rounded-lg p-3 w-40 text-center ${index === statusHistory.length - 1 ? 'border-primary bg-primary/10' : 'border-border bg-card'}`}>
+                            <div className="flex items-center gap-2 justify-center mb-1">
+                                <div className={`w-3 h-3 rounded-full ${statusColors[update.newStatus!] || 'bg-gray-400'}`} />
+                                <span className="text-base font-bold">{statusText[update.newStatus as keyof typeof statusText]}</span>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                {format(update.createdAt.toDate(), "d MMM, yyyy", { locale: es })}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                                {format(update.createdAt.toDate(), "HH:mm 'hs'", { locale: es })}
+                            </p>
+                            <p className="text-xs font-semibold mt-2">
+                                por {'userId' in update && update.userId === 'Ciudadano' ? 'Ciudadano' : 'Admin'}
+                            </p>
+                        </div>
                     </div>
-                    <div className="text-xs text-muted-foreground mt-1 text-center px-1">
-                      <p className="font-semibold">{'userId' in update && update.userId === 'Ciudadano' ? 'Ciudadano' : 'Admin'}</p>
-                      <p>{format(update.createdAt.toDate(), "d MMM, yyyy - HH:mm", { locale: es })}</p>
-                    </div>
-                  </div>
 
-                  {index < statusHistory.length - 1 && (
-                    <div className="flex flex-col items-center min-w-[120px] max-w-[120px] mx-2 pt-1">
-                        <p className="text-xs text-center text-muted-foreground mb-1 break-words">{'message' in update && update.message}</p>
-                        <ChevronRight className="w-8 h-8 text-muted-foreground mt-auto" />
+                    {/* Connector */}
+                    {index < statusHistory.length - 1 && (
+                        <div className="flex flex-col items-center min-w-[150px] max-w-[150px] px-2 text-center">
+                            <p className="text-xs text-muted-foreground whitespace-normal mb-2">
+                                {'message' in update && update.message}
+                            </p>
+                            <div className="w-full h-px bg-border relative">
+                               <ChevronRight className="w-6 h-6 text-muted-foreground absolute right-[-12px] top-1/2 -translate-y-1/2 bg-background" />
+                            </div>
+                        </div>
+                    )}
                     </div>
-                  )}
+                ))}
                 </div>
-              ))}
             </div>
-          </div>
-        </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   )
