@@ -18,7 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 
@@ -27,11 +26,11 @@ const animalFormSchema = z.object({
   castrated: z.enum(["yes", "no"], { required_error: "Debe seleccionar una opción." }),
   breed: z.string().min(1, "La raza es obligatoria.").max(32, "La raza no puede tener más de 32 caracteres."),
   weight: z.string().optional(),
-  type: z.enum(["cabra", "caballo", "gato", "oveja", "perro", "toro", "vaca"], {
+  type: z.enum(["perro", "gato", "equino"], {
     required_error: "Debe seleccionar un tipo de animal.",
   }),
   color: z.string().optional(),
-  sex: z.enum(["macho", "hembra"], { required_error: "Debe seleccionar el sexo." }),
+  sex: z.enum(["macho", "hembra"]).optional(),
 });
 
 type AnimalFormValues = z.infer<typeof animalFormSchema>;
@@ -44,6 +43,8 @@ export default function RegistroAnimalPage() {
     defaultValues,
     mode: "onChange",
   });
+
+  const animalType = form.watch("type");
 
   function onSubmit(data: AnimalFormValues) {
     toast({
@@ -95,36 +96,24 @@ export default function RegistroAnimalPage() {
                   <FormItem className="space-y-3">
                     <FormLabel>Castrado</FormLabel>
                     <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex gap-4"
-                      >
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <Button
-                              type="button"
-                              variant={field.value === 'yes' ? 'default' : 'outline'}
-                              onClick={() => field.onChange('yes')}
-                              className="w-24"
-                            >
-                              Sí
-                            </Button>
-                          </FormControl>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                             <Button
-                              type="button"
-                              variant={field.value === 'no' ? 'default' : 'outline'}
-                              onClick={() => field.onChange('no')}
-                              className="w-24"
-                            >
-                              No
-                            </Button>
-                          </FormControl>
-                        </FormItem>
-                      </RadioGroup>
+                      <div className="flex gap-4">
+                        <Button
+                          type="button"
+                          variant={field.value === 'yes' ? 'default' : 'outline'}
+                          onClick={() => field.onChange('yes')}
+                          className="w-24"
+                        >
+                          Sí
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={field.value === 'no' ? 'default' : 'outline'}
+                          onClick={() => field.onChange('no')}
+                          className="w-24"
+                        >
+                          No
+                        </Button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -175,13 +164,9 @@ export default function RegistroAnimalPage() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="cabra">Cabra</SelectItem>
-                        <SelectItem value="caballo">Caballo</SelectItem>
+                        <SelectItem value="equino">Equino</SelectItem>
                         <SelectItem value="gato">Gato</SelectItem>
-                        <SelectItem value="oveja">Oveja</SelectItem>
                         <SelectItem value="perro">Perro</SelectItem>
-                        <SelectItem value="toro">Toro</SelectItem>
-                        <SelectItem value="vaca">Vaca</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -203,48 +188,38 @@ export default function RegistroAnimalPage() {
                 )}
               />
               
-              <FormField
-                control={form.control}
-                name="sex"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormLabel>Sexo</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex gap-4"
-                      >
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                           <FormControl>
-                             <Button
-                              type="button"
-                              variant={field.value === 'macho' ? 'default' : 'outline'}
-                              onClick={() => field.onChange('macho')}
-                              className="w-24"
-                            >
-                              Macho
-                            </Button>
-                          </FormControl>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <Button
-                              type="button"
-                              variant={field.value === 'hembra' ? 'default' : 'outline'}
-                              onClick={() => field.onChange('hembra')}
-                              className="w-24"
-                            >
-                              Hembra
-                            </Button>
-                          </FormControl>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {(animalType === 'perro' || animalType === 'gato') && (
+                <FormField
+                  control={form.control}
+                  name="sex"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel>Sexo</FormLabel>
+                      <FormControl>
+                        <div className="flex gap-4">
+                           <Button
+                            type="button"
+                            variant={field.value === 'macho' ? 'default' : 'outline'}
+                            onClick={() => field.onChange('macho')}
+                            className="w-24"
+                          >
+                            Macho
+                          </Button>
+                          <Button
+                            type="button"
+                            variant={field.value === 'hembra' ? 'default' : 'outline'}
+                            onClick={() => field.onChange('hembra')}
+                            className="w-24"
+                          >
+                            Hembra
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
 
               <Button type="submit" className="w-full">Guardar Animal</Button>
