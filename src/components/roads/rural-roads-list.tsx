@@ -7,7 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import { formatDistanceToNow } from "date-fns"
 import { es } from "date-fns/locale"
-import { Bell } from "lucide-react"
+import { Bell, Map } from "lucide-react"
 import { Button } from "../ui/button"
 
 interface RuralRoadsListProps {
@@ -38,60 +38,70 @@ export function RuralRoadsList({ roads, onRoadSelect, selectedRoadId, onSubscrib
     }, {} as Record<RuralRoadStatus, number>)
 
     return (
-        <Card className="h-[calc(100vh-22rem)] flex flex-col">
-            <CardHeader>
+        <Card className="h-full flex flex-col">
+            <CardHeader className="flex-shrink-0">
                 <CardTitle>Lista de Caminos</CardTitle>
-                <CardDescription>
-                    {totalRoads} caminos monitoreados. Seleccione uno para ver detalles.
-                </CardDescription>
-                <div className="flex pt-2 gap-4">
+                <div className="flex pt-2 gap-4 text-sm text-muted-foreground">
                     {(['Verde', 'Amarillo', 'Rojo'] as RuralRoadStatus[]).map((status) => (
-                        <div key={status} className="flex items-center gap-2 text-sm font-medium">
+                        <div key={status} className="flex items-center gap-2 font-medium">
                             <span className={cn("w-3 h-3 rounded-full", statusColors[status])} />
-                            <span className="text-muted-foreground">{status}:</span>
-                            <span>{roadsByStatus[status] || 0}</span>
+                            <span>{status}:</span>
+                            <span className="text-foreground">{roadsByStatus[status] || 0}</span>
                         </div>
                     ))}
                 </div>
             </CardHeader>
-            <CardContent className="p-0 flex-grow">
+            <CardContent className="p-0 flex-grow overflow-hidden">
                 <ScrollArea className="h-full">
                     <div className="divide-y divide-border">
                     {roads.map(road => (
                         <div 
                             key={road.id} 
                             className={cn(
-                                "p-4 cursor-pointer hover:bg-accent/50 transition-colors group",
-                                selectedRoadId === road.id && "bg-accent"
+                                "p-3 cursor-pointer hover:bg-accent/50 transition-colors group",
+                                selectedRoadId === road.id && !('ontouchstart' in window) && "bg-accent"
                             )}
+                            onClick={() => onRoadSelect(road)}
                         >
-                            <div onClick={() => onRoadSelect(road)}>
-                                <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-start gap-2">
+                                <div className="flex-grow">
                                     <span className="font-medium pr-2">{road.name}</span>
-                                    <span className={cn(
-                                        "w-4 h-4 rounded-full border-2 flex-shrink-0", 
-                                        statusBorderColors[road.status], 
-                                        statusColors[road.status]
-                                    )}></span>
+                                    <p className="text-sm text-muted-foreground mt-1">{road.description}</p>
                                 </div>
-                                <p className="text-sm text-muted-foreground mt-1">{road.description}</p>
+                                <span className={cn(
+                                    "w-4 h-4 mt-1 rounded-full border-2 flex-shrink-0", 
+                                    statusBorderColors[road.status], 
+                                    statusColors[road.status]
+                                )}></span>
                             </div>
                             <div className="flex justify-between items-center mt-2">
                                 <p className="text-xs text-muted-foreground">
                                     Act. {formatDistanceToNow(road.updatedAt.toDate(), { addSuffix: true, locale: es })}
                                 </p>
-                                <Button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    className="h-auto p-1 text-muted-foreground hover:text-primary"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onSubscribe(road);
-                                    }}
-                                >
-                                    <Bell className="w-4 h-4 mr-1" />
-                                    <span className="text-xs">Suscribir</span>
-                                </Button>
+                                <div className="flex items-center gap-1">
+                                    <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="h-auto p-1 text-muted-foreground hover:text-primary md:hidden"
+                                        aria-label="Ver en mapa"
+                                    >
+                                        <Map className="w-4 h-4 mr-1" />
+                                        <span className="text-xs">Mapa</span>
+                                    </Button>
+                                    <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="h-auto p-1 text-muted-foreground hover:text-primary"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onSubscribe(road);
+                                        }}
+                                        aria-label="Suscribirse a notificaciones"
+                                    >
+                                        <Bell className="w-4 h-4 mr-1" />
+                                        <span className="text-xs">Suscribir</span>
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     ))}
