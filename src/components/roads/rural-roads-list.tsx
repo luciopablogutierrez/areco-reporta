@@ -41,11 +41,12 @@ export function RuralRoadsList({ roads, onRoadSelect, selectedRoadId }: RuralRoa
                 <CardDescription>
                     {totalRoads} caminos monitoreados. Seleccione uno para ver detalles.
                 </CardDescription>
-                <div className="flex pt-2 gap-2">
-                    {Object.entries(roadsByStatus).map(([status, count]) => (
-                        <div key={status} className="flex items-center gap-2 text-sm">
-                            <span className={cn("w-3 h-3 rounded-full", statusColors[status as RuralRoadStatus])} />
-                            <span>{count}</span>
+                <div className="flex pt-2 gap-4">
+                    {(['Verde', 'Amarillo', 'Rojo'] as RuralRoadStatus[]).map((status) => (
+                        <div key={status} className="flex items-center gap-2 text-sm font-medium">
+                            <span className={cn("w-3 h-3 rounded-full", statusColors[status])} />
+                            <span className="text-muted-foreground">{status}:</span>
+                            <span>{roadsByStatus[status] || 0}</span>
                         </div>
                     ))}
                 </div>
