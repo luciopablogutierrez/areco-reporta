@@ -1,69 +1,109 @@
-# ¡Hola! Guía Rápida para Usar ArecoReporta
+# Manual de Usuario Detallado: ¡Bienvenido a ArecoReporta!
 
-¡Qué bueno que estás acá! Esta aplicación es como tener un teléfono directo con la municipalidad para ayudar a que todo funcione mejor. Es muy fácil de usar, ¡como mandar un mensaje!
+¡Hola! Nos alegra mucho que te sumes a esta iniciativa para cuidar y mejorar nuestro lugar. **ArecoReporta** es una herramienta creada para que tu voz se escuche y para que, entre todos, hagamos de San Antonio de Areco un lugar mejor.
 
-Acá te explico paso a paso cómo sacarle el jugo.
+Piensa en esta aplicación como un puente directo con la municipalidad. En lugar de tener que llamar por teléfono o ir a una oficina, puedes reportar problemas, consultar información importante y colaborar con tu comunidad desde la comodidad de tu celular o computadora.
 
----
-
-### 1. ¿Viste un problema en la calle? ¡Repórtalo en un toque!
-
-Imagina que estás caminando y ves un pozo gigante en la calle o una luz que no funciona. En lugar de enojarte, ¡puedes ayudar!
-
-1.  **Abrí la App y tocá en "Crear Incidencia".** Es el botón con el símbolo `+`.
-2.  **Buscá la dirección o hacé clic en el mapa.** ¿Sabés la calle? Escribila. Si no, simplemente tocá con el dedo en el mapa justo donde está el problema. ¡El mapa se pondrá en esa ubicación!
-3.  **Contá qué pasa.** Elegí la categoría (por ejemplo, "Baches" o "Alumbrado") y escribí una breve descripción, como "Hay un pozo muy grande en la esquina".
-4.  **Sacale una foto (si querés).** Una imagen vale más que mil palabras. Tocá el botón de la cámara para agregar una foto.
-5.  **¡Listo! Tocá "Enviar Incidencia".**
-
-**¿Qué pasa después?** Tu reporte le llega a la municipalidad. Podrás ver todos tus reportes en la sección **"Mis Reportes"** y mirar cómo cambia de estado (de "Pendiente" a "En Proceso" y, con suerte, a "Resuelto").
+Esta guía te llevará de la mano por cada rincón de la aplicación. Te explicaremos todo paso a paso, con ejemplos simples, para que te conviertas en un experto en muy poco tiempo. ¡Empecemos!
 
 ---
 
-### 2. ¿Necesitás usar un camino de tierra? ¡Fijate si está bueno para pasar!
+### 1. ¿Viste algo que se puede mejorar? ¡Repórtalo en minutos!
 
-Si sos productor, transportista o simplemente vivís en el campo, esta parte te va a encantar.
+Todos nos hemos topado con un pozo en la calle, una luz quemada que deja una cuadra a oscuras o un basural donde no debería estar. Ahora, tienes el poder de hacer algo al respecto de una manera muy sencilla.
 
-1.  **Andá a la sección "Caminos Rurales".** La vas a encontrar en el menú, con el dibujito de un tractor.
-2.  **Mirá la lista y los colores:**
-    *   **Verde:** ¡Pasá tranquilo! El camino está perfecto.
-    *   **Amarillo:** Andá con cuidado. Quizás hay máquinas trabajando o está un poco blando.
-    *   **Rojo:** ¡No pases! El camino está cortado o muy complicado.
-3.  **Tocá un camino para verlo en el mapa.** Al seleccionarlo en la lista, el mapa te mostrará exactamente cuál es y por dónde va.
+#### Paso a paso para crear un reporte:
 
-**Resultado:** Te ahorrás un dolor de cabeza y no te quedás empantanado. ¡Información al instante!
+1.  **Busca el botón "Crear Incidencia"**: Usualmente lo encontrarás en el menú principal o como un botón grande y visible con un símbolo `+`. Al tocarlo, irás a la pantalla para crear un nuevo reporte.
 
----
+2.  **Indica dónde está el problema (¡La ubicación es clave!)**: Esta es la parte más importante. Tienes dos formas de hacerlo:
+    *   **Usando el mapa**: Verás un mapa interactivo. Simplemente muévelo con el dedo (o el mouse) y haz un solo clic en el punto exacto donde está el problema. Verás aparecer un marcador. ¡Así de fácil!
+    *   **Buscando la dirección**: Si te sabes la calle y la altura, puedes escribirla en la barra de búsqueda que dice "Escriba la calle...". A medida que escribes, la app te dará sugerencias. Elige la correcta y el mapa se moverá a esa ubicación.
 
-### 3. ¿Tenés mascotas? ¡Regístralas y mantenelas seguras!
+3.  **Elige la categoría correcta**: Para que tu reporte llegue a la persona indicada, debes decirle a la app de qué se trata. Toca donde dice "Categoría" y elige la opción que mejor describa el problema. Algunas opciones son:
+    *   `Baches`
+    *   `Alumbrado` (luces quemadas, postes caídos)
+    *   `Basura` (contenedores llenos, basura en la calle)
+    *   `Espacios Verdes` (pasto alto, árboles caídos)
+    *   ... y más.
 
-Esta sección es para los que amamos a nuestros amigos de cuatro patas.
+4.  **Describe lo que ves**: En el campo de "Descripción", cuenta con tus palabras qué es lo que sucede. No tiene que ser largo, pero intenta ser claro.
+    *   *Ejemplo para un bache*: "Hay un pozo muy grande y profundo en medio de la calle, justo después de la loma de burro. Es peligroso para las motos."
+    *   *Ejemplo para basura*: "En la esquina de la escuela, dejaron varias bolsas de basura fuera del contenedor, y los perros las están rompiendo."
 
-#### Para registrar tu mascota:
+5.  **¡Una foto vale más que mil palabras! (Opcional)**: Si puedes, saca una foto del problema. Esto ayuda muchísimo al personal de la municipalidad a entender la situación. Toca el botón de la cámara, elige una foto de tu galería o saca una en el momento. Verás una vista previa de la imagen que subiste.
 
-1.  **Andá a "Animales" y luego a "Registro de Animales".**
-2.  **Tocá el botón para añadir uno nuevo.**
-3.  **Completá los datos:** Nombre, si es perro o gato, raza, etc. ¡Es como hacerle el DNI a tu mascota!
-4.  **Guardá y listo.** Tu mascota ya está en tu lista de "Mis Animales".
+6.  **Tus datos (Opcional y privado)**: Hay una sección para añadir tu email o teléfono. No te preocupes, **estos datos son privados y no se mostrarán públicamente**. Sirven únicamente para que la municipalidad pueda contactarte si necesita más detalles.
 
-#### ¿Se te perdió tu mascota? ¡Creá una alerta!
+7.  **¡Listo! Envía tu reporte**: Cuando estés conforme, toca el botón grande que dice **"Enviar Incidencia"**.
 
-1.  **Andá a "Animales" y elegí "Alerta Animal Perdido".**
-2.  **Elegí cuál de tus mascotas registradas se perdió.**
-3.  **Contá dónde y cómo fue.** Por ejemplo, "Se escapó por el barrio de la estación".
-4.  **Generá la alerta.**
-
-**¿Qué pasa después?** Tu alerta se publica en el **"Portal de Animales"**, donde toda la comunidad puede verla y ayudarte a buscar. Si alguien la encuentra, te podrá contactar a través de la app.
+**¿Qué pasa después?**
+¡Felicidades, has hecho tu parte! La aplicación te llevará automáticamente a la sección **"Mis Reportes"**. Allí verás tu nueva incidencia al principio de la lista, con el estado "Pendiente". Podrás entrar a esta sección siempre que quieras para ver si tu reporte cambia a "En Proceso" o, finalmente, a "Resuelto".
 
 ---
 
-### 4. ¿Querés chusmear qué pasa en la ciudad? ¡Explorá el mapa!
+### 2. ¿Vas al campo? ¡Revisa el estado de los caminos rurales!
 
-El mapa es el corazón de la app.
+Si vives, trabajas o simplemente necesitas transitar por los caminos de tierra de nuestro partido, esta sección es tu mejor aliada. Olvídate de la incertidumbre de no saber si podrás pasar después de una lluvia.
 
-1.  **Entrá a "Mapa Interactivo" en el menú.**
-2.  **Navegá con los dedos.** Podés hacer zoom y moverte para ver las distintas zonas de Areco, Vagues, Lía y Duggan.
-3.  **Filtrá lo que te interesa.** Arriba tenés filtros para ver solo los reportes de "Basura" o solo los que están "Resueltos". Jugá con los filtros para encontrar justo lo que buscás.
-4.  **Tocá los puntitos de colores.** Cada punto es un reporte. Al tocarlo, te dirá de qué se trata, quién lo reportó y en qué estado está.
+#### Cómo usar el mapa de caminos:
 
-¡Así de fácil! Con ArecoReporta, todos podemos colaborar para tener una ciudad y un partido mucho mejor. ¡Animate a usarla!
+1.  **Entra a "Caminos Rurales"**: Busca esta opción en el menú principal. La reconocerás por el ícono de un tractor.
+
+2.  **Entiende los colores (¡es muy fácil!)**: Verás una lista de todos los caminos rurales y un mapa. Cada camino tiene un color que te dice su estado:
+    *   **VERDE**: ¡Adelante! El camino está en perfectas condiciones y es transitable para todo tipo de vehículos.
+    *   **AMARILLO**: Conduce con precaución. Puede que el camino esté un poco blando, haya máquinas trabajando, o alguna otra condición que requiera que vayas más despacio.
+    *   **ROJO**: ¡No pases! El camino está intransitable, ya sea por barro, agua o alguna obra que lo bloquea por completo. Buscar una alternativa es la mejor opción.
+
+3.  **Interactúa con la lista y el mapa**:
+    *   Al tocar el nombre de un camino en la lista, el mapa se centrará en él y lo resaltará para que veas exactamente por dónde va.
+    *   También puedes tocar directamente sobre la línea de un camino en el mapa. Aparecerá una ventana con su nombre, estado y la razón (por ejemplo, "Calzada con barro. Circular a baja velocidad").
+
+**Resultado final:** Sales de tu casa sabiendo exactamente con qué te vas a encontrar. Te ahorras tiempo, evitas quedarte atascado y cuidas tu vehículo.
+
+---
+
+### 3. El rincón de nuestras mascotas: regístralas y mantenlas seguras
+
+Sabemos lo importantes que son nuestros amigos de cuatro patas. Esta sección está pensada para ellos y para darte tranquilidad.
+
+#### a) Registra a tu mascota (¡Hazle su DNI virtual!)
+
+Es una buena idea registrar a tus mascotas antes de que ocurra algo. Así, si alguna vez se pierden, tendrás toda su información a mano para crear una alerta rápidamente.
+
+1.  **Ve a la sección "Animales"** en el menú.
+2.  Elige la opción **"Registro de Animales"**.
+3.  Toca el botón para **añadir un nuevo animal** (suele tener un `+`).
+4.  **Completa el formulario**: Te pedirá el nombre, si es perro, gato u otro tipo, su raza, color, si está castrado, etc. Sube una buena foto donde se vea bien.
+5.  **Guarda y listo**. Tu mascota ya forma parte de tu familia virtual en la app. Podrás verla en tu lista de "Mis Animales".
+
+#### b) ¿Se perdió tu mascota? ¡Crea una alerta para que la comunidad te ayude!
+
+Si tu mascota no aparece, no pierdas la calma. Actúa rápido creando una alerta.
+
+1.  **Vuelve a la sección "Animales"** y elige **"Alerta Animal Perdido"**.
+2.  **Selecciona cuál de tus mascotas registradas se perdió**. Al tocar su foto, sus datos se cargarán automáticamente.
+3.  **Añade los detalles de la pérdida**:
+    *   **Zona**: Elige en qué área se perdió (San Antonio, Vagues, Lía, etc.).
+    *   **Ubicación y detalles**: Sé lo más específico posible. "Se escapó del patio de casa en el Barrio San Francisco", "Lo vieron por última vez corriendo cerca de la estación de tren".
+    *   **Notas adicionales**: Cualquier dato extra es útil. "Es miedoso, no le gusta que lo corran", "Llevaba puesto un collar rojo con una chapita", "Responde al nombre de 'Fido'".
+4.  **Toca el botón "Generar Alerta de Búsqueda"**.
+
+**¿Qué pasa después?**
+Tu alerta se publica inmediatamente en el **"Portal de Animales"** de la aplicación. Toda la comunidad podrá ver la foto de tu mascota, leer los detalles y la zona donde se perdió. Si alguien lo ve, podrá tocar un botón que dice "Tengo información". Cuando eso suceda, a ti te llegará una **notificación** a tu celular a través de esta misma app. ¡Es un trabajo en equipo!
+
+---
+
+### 4. Explora el Mapa Interactivo: la ciudad en la palma de tu mano
+
+El mapa es el corazón de ArecoReporta. Es una radiografía de lo que está pasando en nuestra comunidad, actualizada por los propios vecinos.
+
+1.  **Entra a "Mapa Interactivo"** desde el menú principal.
+2.  **Navega libremente**: Usa tus dedos para moverte por el mapa, acercarte (hacer zoom) a una calle específica o alejarte para tener una vista general de todo el partido.
+3.  **Usa los filtros para encontrar lo que buscas**: En la parte de arriba del mapa, verás botones de filtros. ¿Solo te interesan los baches? ¿Quieres ver únicamente los reportes que ya fueron resueltos? Puedes filtrar por:
+    *   **Estado**: Pendiente, En Proceso, Resuelto.
+    *   **Categoría**: Basura, Alumbrado, etc.
+    *   **Zona**: Para ver solo lo que pasa en Vagues, por ejemplo.
+4.  **Toca los puntos de colores**: Cada punto en el mapa es un reporte hecho por un vecino. Al tocarlo, se abrirá una pequeña ventana con el título del reporte, su categoría y estado.
+
+¡Y eso es todo! Ya estás listo para ser un ciudadano activo y un experto en **ArecoReporta**. Tu participación es lo que hace que esta herramienta funcione. ¡Gracias por sumarte!
