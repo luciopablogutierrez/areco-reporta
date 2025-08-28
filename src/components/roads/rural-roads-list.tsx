@@ -81,25 +81,23 @@ export function RuralRoadsList({ roads, onRoadSelect, selectedRoadId, onSubscrib
                                 <div className="flex items-center gap-1">
                                     <Button 
                                         variant="ghost" 
-                                        size="sm" 
-                                        className="h-auto p-1 text-muted-foreground hover:text-primary md:hidden"
+                                        size="icon" 
+                                        className="h-8 w-8 text-muted-foreground hover:text-primary md:hidden"
                                         aria-label="Ver en mapa"
                                     >
-                                        <Map className="w-4 h-4 mr-1" />
-                                        <span className="text-xs">Mapa</span>
+                                        <Map className="w-4 h-4" />
                                     </Button>
                                     <Button 
                                         variant="ghost" 
-                                        size="sm" 
-                                        className="h-auto p-1 text-muted-foreground hover:text-primary"
+                                        size="icon" 
+                                        className="h-8 w-8 text-muted-foreground hover:text-primary"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             onSubscribe(road);
                                         }}
                                         aria-label="Suscribirse a notificaciones"
                                     >
-                                        <Bell className="w-4 h-4 mr-1" />
-                                        <span className="text-xs">Suscribir</span>
+                                        <Bell className="w-4 h-4" />
                                     </Button>
                                 </div>
                             </div>
