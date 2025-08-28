@@ -5,7 +5,7 @@ import type { RuralRoad, RuralRoadStatus } from "@/types"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
-import { formatDistanceToNow } from "date-fns"
+import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import { Bell, Map } from "lucide-react"
 import { Button } from "../ui/button"
@@ -76,7 +76,7 @@ export function RuralRoadsList({ roads, onRoadSelect, selectedRoadId, onSubscrib
                             </div>
                             <div className="flex justify-between items-center mt-2">
                                 <p className="text-xs text-muted-foreground">
-                                    Act. {formatDistanceToNow(road.updatedAt.toDate(), { addSuffix: true, locale: es })}
+                                    Act. {format(road.updatedAt.toDate(), "dd/MM/yy, HH:mm 'hs'", { locale: es })}
                                 </p>
                                 <div className="flex items-center gap-1">
                                     <Button 
