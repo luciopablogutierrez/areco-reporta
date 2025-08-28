@@ -4,94 +4,76 @@ Este documento identifica oportunidades para refinar la interfaz y la experienci
 
 ---
 
-### **Mejora 1: Claridad y Feedback en el Flujo de Creación de Incidencias**
+### **Mejora 1: Completar el Módulo de Animales**
 
 #### **1. Problema identificado**
-El formulario de creación de reportes es la interacción más crítica. Actualmente, tras enviar un reporte, el usuario solo recibe una notificación temporal (toast) y permanece en la misma página. Esto puede generar incertidumbre: *¿Se envió correctamente? ¿Dónde lo puedo ver ahora?* Además, la carga de imágenes no ofrece previsualización.
+El módulo de animales tiene las pantallas de registro y alerta, pero la lógica no está completamente conectada. Un usuario puede registrar una mascota, pero el formulario de alerta de animal perdido aún no utiliza esa información.
 
 #### **2. Propuesta de mejora**
-1.  **Redirección Post-Envío:** Tras un envío exitoso, redirigir automáticamente al usuario a la página "Mis Reportes".
-2.  **Previsualización de Imágenes:** Permitir al usuario ver las imágenes que ha seleccionado antes de enviarlas, con la opción de eliminarlas individualmente.
-3.  **Botón de Envío Inteligente:** Deshabilitar el botón "Enviar Incidencia" hasta que los campos obligatorios (ubicación, categoría, descripción) estén completos para prevenir errores.
+1.  **Conectar Formulario de Alerta:** Modificar la página de "Alerta Animal Perdido" para que muestre una lista de las mascotas registradas por el usuario, permitiéndole seleccionar una para reportar.
+2.  **Enviar la Alerta:** Implementar la lógica final para que, al enviar el formulario, se cree una alerta (actualmente simulada con un toast, pero lista para conectarse a un backend).
 
-#### **3. Ejemplo práctico**
-- **Antes:** Usuario hace clic en "Enviar", ve un toast y se queda en el formulario vacío.
-- **Después:** Usuario hace clic en "Enviar", es llevado a `/reportes` y ve su nuevo reporte al inicio de la lista, quizás con un sutil efecto de resaltado que se desvanece.
-- **En el formulario:** Debajo del área de carga de fotos, se mostrarían miniaturas de las imágenes seleccionadas, cada una con un ícono de papelera para eliminarla.
+#### **3. Beneficio para el usuario**
+- **Flujo Completo:** El usuario puede completar todo el ciclo: registrar su mascota y, si es necesario, reportarla como perdida, haciendo que el módulo sea funcional de principio a fin.
+- **Experiencia Lógica:** Se elimina la confusión de tener un formulario de alerta que no se conecta con las mascotas ya existentes.
 
-#### **4. Beneficio para el usuario**
-- **Confianza y Certeza:** El usuario ve inmediatamente el resultado de su acción, confirmando que el reporte fue creado y está en el sistema.
-- **Reducción de Errores:** Se evitan envíos de formularios incompletos y se da al usuario control total sobre los archivos adjuntos.
-- **Menos Clics:** El usuario no tiene que navegar manualmente para verificar su reporte.
-
-#### **5. Prioridad**
-**Alta.** Mejora directamente el flujo de trabajo principal de la aplicación y la percepción de fiabilidad del sistema.
+#### **4. Prioridad**
+**Alta.** Es el paso final para completar una de las funcionalidades principales y más visibles de la aplicación.
 
 ---
 
-### **Mejora 2: Contextualización y Simplificación en la Navegación y Filtros**
+### **Mejora 2: Implementar Autenticación Real con Firebase**
 
 #### **1. Problema identificado**
-El usuario tiene que aplicar los mismos filtros en dos lugares distintos: en la página del Mapa y en la de "Mis Reportes". Esto es repetitivo y puede llevar a inconsistencias si el usuario olvida qué filtros aplicó en cada sección.
+La aplicación actualmente no tiene un sistema de usuarios real. Todo es público o simulado para un único "usuario". Esto impide la personalización y la seguridad.
 
 #### **2. Propuesta de mejora**
-Unificar el estado de los filtros para que sean globales en toda la aplicación. Si un usuario filtra por "Baches" en el mapa, al navegar a "Mis Reportes", este filtro debería persistir.
+1.  **Integrar Firebase Authentication:** Conectar la aplicación a un proyecto de Firebase y utilizar su servicio de autenticación.
+2.  **Hacer Funcionales el Login/Registro:** Implementar la lógica en las páginas `/login` y `/registro` para que los usuarios puedan crear cuentas e iniciar sesión con email/contraseña o proveedores como Google.
+3.  **Proteger Rutas:** Restringir el acceso a páginas como `/reportes`, `/animales` y `/admin` solo a usuarios autenticados.
+4.  **Personalizar UI:** Mostrar el nombre y email del usuario real en la barra lateral.
 
-#### **3. Ejemplo práctico**
-- **Antes:** Usuario filtra por "Alumbrado" en `/mapa`. Luego va a `/reportes` y tiene que volver a seleccionar el filtro "Alumbrado".
-- **Después:** Usuario filtra por "Alumbrado" en `/mapa`. Al navegar a `/reportes`, la lista ya está filtrada por "Alumbrado" y se muestra un badge de filtro activo "Alumbrado [x]".
+#### **3. Beneficio para el usuario**
+- **Personalización:** El usuario podrá ver "Mis Reportes" y "Mis Animales" reales.
+- **Seguridad:** Los datos de los usuarios y sus reportes estarán protegidos.
+- **Base para el Futuro:** Es el pilar para implementar notificaciones, roles de usuario (admin vs. ciudadano) y persistencia de datos.
 
-#### **4. Beneficio para el usuario**
-- **Experiencia Fluida:** Se crea una sensación de coherencia y continuidad. La aplicación "recuerda" la intención del usuario.
-- **Ahorro de Tiempo y Esfuerzo:** Se elimina la necesidad de realizar la misma acción varias veces.
-- **Claridad Mental:** El usuario mantiene un único contexto de filtrado mientras navega, reduciendo la carga cognitiva.
-
-#### **5. Prioridad**
-**Alta.** Impacta directamente en la eficiencia de navegación entre las dos vistas más importantes.
+#### **4. Prioridad**
+**Alta.** Es la mejora más importante para convertir el prototipo en una aplicación productiva y escalable.
 
 ---
 
 ### **Mejora 3: Onboarding y Guía para Nuevos Usuarios**
 
 #### **1. Problema identificado**
-La aplicación asume que el usuario entenderá inmediatamente todas sus funcionalidades. Un nuevo usuario podría no descubrir la utilidad de los filtros, la sección de caminos rurales o cómo interpretar los estados de un reporte.
+La aplicación asume que el usuario entenderá inmediatamente todas sus funcionalidades. Un nuevo usuario podría no descubrir cómo interpretar los estados de un reporte o el propósito de algunas secciones.
 
 #### **2. Propuesta de mejora**
 1.  **Tooltips Guiados:** En la primera visita a secciones clave (Mapa, Reportes), mostrar pequeños tooltips o pop-ups que señalen las funcionalidades principales (ej: "Usa estos filtros para acotar tu búsqueda").
-2.  **Estados Vacíos Ilustrativos:** En secciones como "Mis Reportes" o "Notificaciones", si están vacías, mostrar un mensaje útil con una ilustración amigable y un llamado a la acción claro (ej: "Aún no has creado reportes. ¡Anímate a crear el primero!" con un botón que lleve al formulario).
-3.  **Leyenda Interactiva en el Mapa:** Añadir un pequeño botón de "Leyenda" en el mapa que, al pulsarlo, explique qué significa cada color de pin de reporte y cada color de trazado de camino.
+2.  **Estados Vacíos Ilustrativos:** Mejorar las pantallas que pueden estar vacías (ej: "Mis Animales" antes de registrar uno) con ilustraciones amigables y un llamado a la acción claro (ej: "Aún no has registrado mascotas. ¡Anímate a registrar la primera!").
 
-#### **3. Ejemplo práctico**
-- Al abrir por primera vez `/mapa`, un pequeño pop-up señala el botón de filtros con el texto: "Filtra los reportes por categoría, estado o zona para encontrar lo que buscas".
-- Un usuario sin reportes ve en `/reportes` una ilustración y el texto "Aquí verás el estado de todas las incidencias que crees", en lugar de una pantalla en blanco.
-
-#### **4. Beneficio para el usuario**
+#### **3. Beneficio para el usuario**
 - **Curva de Aprendizaje Suave:** Los nuevos usuarios se sienten guiados y descubren el valor de la aplicación más rápidamente.
 - **Reducción de la Ambigüedad:** Se clarifica el propósito de cada sección, incluso cuando no hay datos que mostrar.
 - **Autonomía del Usuario:** Se empodera al usuario para que explore y utilice todas las herramientas a su disposición.
 
-#### **5. Prioridad**
+#### **4. Prioridad**
 **Media.** Es muy importante para la adquisición y retención de nuevos usuarios, pero la funcionalidad principal ya es utilizable sin ella.
 
 ---
 
-### **Mejora 4: Accesibilidad y Legibilidad Visual**
+## Mejoras Ya Implementadas
 
-#### **1. Problema identificado**
-Aunque el diseño es limpio, se podrían mejorar pequeños detalles de accesibilidad. Por ejemplo, depender únicamente del color para diferenciar estados (como en los caminos rurales) puede ser un problema para usuarios con daltonismo.
+Las siguientes sugerencias fueron propuestas y ya han sido integradas en el sistema:
 
-#### **2. Propuesta de mejora**
-1.  **Patrones para Estados:** Además del color, usar patrones de línea para los caminos rurales en el mapa (ej: línea continua para Verde, punteada para Amarillo, discontinua para Rojo).
-2.  **Contraste de Texto:** Revisar que todos los textos, especialmente los `muted-foreground`, tengan un ratio de contraste suficiente sobre el fondo, según las directrices WCAG.
-3.  **Foco del Teclado Visible:** Asegurar que todos los elementos interactivos (botones, enlaces, filtros) tengan un estado de `:focus` visualmente claro para la navegación con teclado.
+-   **Claridad y Feedback en el Flujo de Creación de Incidencias:**
+    -   **Hecho:** El usuario ahora es redirigido a "Mis Reportes" tras un envío exitoso.
+    -   **Hecho:** Se ha implementado la previsualización de imágenes con opción a eliminarlas.
+    -   **Hecho:** El botón de envío se deshabilita hasta que el formulario es válido.
 
-#### **3. Ejemplo práctico**
-- En el mapa, el "Camino a Vagues" (Amarillo) se mostraría no solo en color amarillo, sino también con una línea de guiones.
-- Al navegar con la tecla `Tab`, el botón "Crear Incidencia" ganaría un borde azul (usando la variable `--ring`) claramente visible.
+-   **Contextualización y Simplificación en la Navegación y Filtros:**
+    -   **Hecho:** Los filtros del mapa y de la lista de reportes ahora están sincronizados mediante un estado global (`Zustand`), proporcionando una experiencia coherente.
 
-#### **4. Beneficio para el usuario**
-- **Inclusividad:** La aplicación se vuelve utilizable para un espectro más amplio de personas, incluyendo aquellas con discapacidades visuales.
-- **Navegación Alternativa:** Facilita el uso para usuarios avanzados que prefieren el teclado.
-
-#### **5. Prioridad**
-**Media.** Aunque no bloquea el uso, es fundamental para crear un producto cívico verdaderamente inclusivo y profesional.
+-   **Accesibilidad y Legibilidad Visual:**
+    -   **Hecho:** Se han añadido patrones de línea a los caminos rurales en el mapa para mejorar la accesibilidad, además del color.
+    -   **Hecho:** Se ha añadido una leyenda al mapa para clarificar la simbología.

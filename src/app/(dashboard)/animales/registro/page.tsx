@@ -24,7 +24,7 @@ export default function MisAnimalesPage() {
 
     return (
         <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-background">
-            <header className="flex items-center p-4 border-b">
+            <header className="flex items-center p-4 border-b sticky top-0 bg-background z-10">
                 <Link href="/animales">
                     <Button variant="ghost" size="icon">
                         <ArrowLeft className="h-6 w-6" />
@@ -41,22 +41,30 @@ export default function MisAnimalesPage() {
                         ))}
                     </div>
                 ) : (
-                    <div className="flex flex-grow flex-col items-center justify-center text-center p-4">
+                    <div className="flex flex-grow flex-col items-center justify-center text-center p-4 h-full mt-[-60px]">
                         <PetsIllustration />
                         <p className="mt-4 text-lg text-muted-foreground">
-                            No hay animales registrados
+                            No hay animales registrados.
                         </p>
+                        <Link href="/animales/registro/nuevo" className="mt-4">
+                            <Button>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Registrar mi primer animal
+                            </Button>
+                        </Link>
                     </div>
                 )}
             </main>
 
-            <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8">
-                <Link href="/animales/registro/nuevo">
-                    <Button size="icon" className="rounded-full h-14 w-14 shadow-lg">
-                        <Plus className="h-8 w-8" />
-                    </Button>
-                </Link>
-            </div>
+            {pets.length > 0 && (
+                <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8">
+                    <Link href="/animales/registro/nuevo">
+                        <Button size="icon" className="rounded-full h-14 w-14 shadow-lg">
+                            <Plus className="h-8 w-8" />
+                        </Button>
+                    </Link>
+                </div>
+            )}
         </div>
     );
 }
