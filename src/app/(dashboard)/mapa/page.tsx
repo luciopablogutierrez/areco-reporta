@@ -4,7 +4,6 @@ import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { mockReports } from '@/lib/mock-data';
 import { MapFilters } from '@/components/map/map-filters';
-import type { Report, ReportCategory, ReportStatus } from '@/types';
 import { useFilterStore } from '@/store/filters';
 import { locationTagMap } from '@/lib/i18n';
 import { mockRuralRoads } from '@/lib/mock-roads';

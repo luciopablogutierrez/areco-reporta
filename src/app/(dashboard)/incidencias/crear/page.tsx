@@ -2,20 +2,28 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Camera, Home, Mail, MapPin, Phone, Search, Loader2, Info } from 'lucide-react';
+import { Camera, Home, Mail, MapPin, Phone, Search, Loader2, Info, X, Trash2 } from 'lucide-react';
 import { mockReports } from '@/lib/mock-data';
 import { mockRuralRoads } from '@/lib/mock-roads';
 import type { Report, RuralRoad } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useDebounce } from '@/hooks/use-debounce';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { categoryText } from '@/lib/i18n';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import Image from 'next/image';
 
 const ReportsMap = dynamic(() => import('@/components/map/reports-map'), {
   ssr: false,
@@ -28,12 +36,27 @@ interface NominatimResult {
     display_name: string;
 }
 
-// Function to calculate the squared distance from a point to a line segment
+const incidenciaFormSchema = z.object({
+    location: z.object({
+        lat: z.number(),
+        lng: z.number(),
+    }, { required_error: "Debe seleccionar una ubicación en el mapa." }),
+    addressQuery: z.string().min(1, "La dirección es obligatoria."),
+    addressDetails: z.string().optional(),
+    category: z.string({ required_error: "Debe seleccionar una categoría."}),
+    description: z.string().min(10, "La descripción debe tener al menos 10 caracteres.").max(500, "Máximo 500 caracteres."),
+    images: z.array(z.instanceof(File)).max(5, "Puedes subir un máximo de 5 imágenes.").optional(),
+    shareData: z.boolean().default(true),
+    contactAddress: z.string().optional(),
+    contactEmail: z.string().email("Email inválido.").optional(),
+    contactPhone: z.string().optional(),
+});
+
+type IncidenciaFormValues = z.infer<typeof incidenciaFormSchema>;
+
 function getSqDist(p: {lat: number, lng: number}, p1: {lat: number, lng: number}, p2: {lat: number, lng: number}) {
-    let x = p1.lat,
-        y = p1.lng,
-        dx = p2.lat - x,
-        dy = p2.lng - y;
+    let x = p1.lat, y = p1.lng;
+    let dx = p2.lat - x, dy = p2.lng - y;
 
     if (dx !== 0 || dy !== 0) {
         const t = ((p.lat - x) * dx + (p.lng - y) * dy) / (dx * dx + dy * dy);
@@ -45,18 +68,15 @@ function getSqDist(p: {lat: number, lng: number}, p1: {lat: number, lng: number}
             y += dy * t;
         }
     }
-
     dx = p.lat - x;
     dy = p.lng - y;
-
     return dx * dx + dy * dy;
 }
 
 
 export default function CrearIncidenciaPage() {
-    const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
+    const router = useRouter();
     const [mapCenter, setMapCenter] = useState<[number, number]>([-34.23, -59.48]);
-    const [reports, setReports] = useState<Report[]>(mockReports);
     const [addressQuery, setAddressQuery] = useState('');
     const [addressResults, setAddressResults] = useState<NominatimResult[]>([]);
     const [isLoadingAddress, setIsLoadingAddress] = useState(false);
@@ -64,24 +84,31 @@ export default function CrearIncidenciaPage() {
     const { toast } = useToast();
     const debouncedSearchTerm = useDebounce(addressQuery, 500);
 
-    const checkLocationOnRuralRoad = useCallback((latlng: { lat: number, lng: number }) => {
-        const proximityThreshold = 0.00001; // Squared distance threshold, adjust as needed
-        let onRoad = null;
+    const form = useForm<IncidenciaFormValues>({
+        resolver: zodResolver(incidenciaFormSchema),
+        defaultValues: {
+            shareData: true,
+            images: [],
+        },
+    });
 
+    const selectedLocation = form.watch('location');
+    const imageFiles = form.watch('images') || [];
+
+    const checkLocationOnRuralRoad = useCallback((latlng: { lat: number, lng: number }) => {
+        const proximityThreshold = 0.00001; 
+        let onRoad = null;
         for (const road of mockRuralRoads) {
             for (let i = 0; i < road.coordinates.length - 1; i++) {
                 const p1 = { lat: road.coordinates[i][0], lng: road.coordinates[i][1] };
                 const p2 = { lat: road.coordinates[i+1][0], lng: road.coordinates[i+1][1] };
-                const sqDist = getSqDist(latlng, p1, p2);
-
-                if (sqDist < proximityThreshold) {
+                if (getSqDist(latlng, p1, p2) < proximityThreshold) {
                     onRoad = road;
                     break;
                 }
             }
             if (onRoad) break;
         }
-        
         if (onRoad && (onRoad.status === 'Amarillo' || onRoad.status === 'Rojo')) {
             setRoadStatusAlert({ road: onRoad });
         } else {
@@ -90,16 +117,15 @@ export default function CrearIncidenciaPage() {
     }, []);
 
     const handleMapClick = (latlng: { lat: number; lng: number }) => {
-        setSelectedLocation(latlng);
+        form.setValue('location', latlng, { shouldValidate: true });
         setMapCenter([latlng.lat, latlng.lng]);
+        setAddressQuery(`Ubicación en mapa: ${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}`);
+        form.setValue('addressQuery', `Ubicación en mapa: ${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}`);
         checkLocationOnRuralRoad(latlng);
     };
 
     const handleSearchAddress = useCallback(async (query: string) => {
-        if (query.length < 5) {
-            setAddressResults([]);
-            return;
-        };
+        if (query.length < 5 || query.startsWith("Ubicación en mapa")) return;
         setIsLoadingAddress(true);
         try {
             const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query + ', San Antonio de Areco, Buenos Aires, Argentina')}&format=json&limit=5`);
@@ -107,22 +133,15 @@ export default function CrearIncidenciaPage() {
             setAddressResults(data);
         } catch (error) {
             console.error('Error fetching address:', error);
-            toast({
-                title: "Error de Búsqueda",
-                description: "No se pudo buscar la dirección. Intente de nuevo.",
-                variant: "destructive",
-            });
+            toast({ title: "Error de Búsqueda", description: "No se pudo buscar la dirección.", variant: "destructive" });
         } finally {
             setIsLoadingAddress(false);
         }
     }, [toast]);
 
     useEffect(() => {
-        if (debouncedSearchTerm) {
-            handleSearchAddress(debouncedSearchTerm);
-        } else {
-            setAddressResults([]);
-        }
+        if (debouncedSearchTerm) handleSearchAddress(debouncedSearchTerm);
+        else setAddressResults([]);
     }, [debouncedSearchTerm, handleSearchAddress]);
 
     const handleSelectAddress = (result: NominatimResult) => {
@@ -131,16 +150,40 @@ export default function CrearIncidenciaPage() {
         const location = { lat, lng };
 
         setAddressQuery(result.display_name);
-        setSelectedLocation(location);
+        form.setValue('addressQuery', result.display_name);
+        form.setValue('location', location, { shouldValidate: true });
         setMapCenter([lat, lng]);
         setAddressResults([]);
         checkLocationOnRuralRoad(location);
     };
 
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const files = Array.from(event.target.files);
+            const currentFiles = form.getValues('images') || [];
+            form.setValue('images', [...currentFiles, ...files]);
+        }
+    };
+    
+    const handleRemoveImage = (index: number) => {
+        const currentFiles = form.getValues('images') || [];
+        form.setValue('images', currentFiles.filter((_, i) => i !== index));
+    };
+
+    function onSubmit(data: IncidenciaFormValues) {
+        console.log(data); // Here you would send the data to your backend
+        toast({
+          title: "Incidencia Enviada Correctamente",
+          description: "Gracias por tu colaboración. Tu reporte ha sido registrado.",
+        });
+        // This is where we add the redirection
+        router.push('/reportes');
+    }
 
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <div className="space-y-6">
             <header className="mb-8">
                 <h1 className="text-3xl font-bold">Crear Incidencia</h1>
@@ -150,45 +193,43 @@ export default function CrearIncidenciaPage() {
                 <CardHeader>
                     <CardTitle>Detalles de la Incidencia</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="space-y-2 relative">
-                        <Label htmlFor="location">Ubicación de la incidencia *</Label>
-                        <div className="relative">
-                            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                            <Input 
-                                id="location" 
-                                placeholder="Escriba la calle para buscar o haga click en el mapa..." 
-                                className="pl-10"
-                                value={addressQuery}
-                                onChange={(e) => setAddressQuery(e.target.value)}
-                            />
-                            <div                                 
-                                className="absolute right-1 top-1/2 -translate-y-1/2"
-                            >
-                                {isLoadingAddress ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5 text-muted-foreground" />}
+                <CardContent className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="location"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Ubicación de la incidencia *</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <Input 
+                                    placeholder="Escriba la calle para buscar o haga click en el mapa..." 
+                                    className="pl-10"
+                                    value={addressQuery}
+                                    onChange={(e) => {
+                                        setAddressQuery(e.target.value);
+                                        form.setValue('addressQuery', e.target.value);
+                                    }}
+                                />
+                                <div className="absolute right-1 top-1/2 -translate-y-1/2">
+                                    {isLoadingAddress ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5 text-muted-foreground" />}
+                                </div>
                             </div>
-                        </div>
-                        {addressResults.length > 0 && (
-                            <div className="absolute z-10 w-full mt-1">
-                                <ul className="w-full bg-card border rounded-md shadow-lg max-h-60 overflow-y-auto">
-                                    {addressResults.map((result) => (
-                                        <li 
-                                            key={result.place_id} 
-                                            className="px-4 py-2 cursor-pointer hover:bg-accent"
-                                            onClick={() => handleSelectAddress(result)}
-                                        >
-                                            <p className="text-sm font-medium">{result.display_name}</p>
-                                        </li>
-                                    ))}
-                                </ul>
+                          </FormControl>
+                          {addressResults.length > 0 && (
+                            <div className="relative z-10 w-full">
+                              <ul className="absolute w-full bg-card border rounded-md shadow-lg max-h-60 overflow-y-auto">
+                                  {addressResults.map((result) => (
+                                      <li key={result.place_id} className="px-4 py-2 cursor-pointer hover:bg-accent" onClick={() => handleSelectAddress(result)}>
+                                          <p className="text-sm font-medium">{result.display_name}</p>
+                                      </li>
+                                  ))}
+                              </ul>
                             </div>
-                        )}
-                         {selectedLocation && (
-                            <p className="text-xs text-muted-foreground pt-2">
-                                Coordenadas seleccionadas: {selectedLocation.lat.toFixed(5)}, {selectedLocation.lng.toFixed(5)}
-                            </p>
-                        )}
-                        {roadStatusAlert && (
+                          )}
+                          <FormMessage />
+                          {roadStatusAlert && (
                             <Alert className="mt-4" variant={roadStatusAlert.road.status === 'Rojo' ? 'destructive' : 'default'}>
                                 <Info className="h-4 w-4" />
                                 <AlertTitle>Atención: Camino con Transitabilidad Limitada</AlertTitle>
@@ -197,78 +238,144 @@ export default function CrearIncidenciaPage() {
                                     {roadStatusAlert.road.description}
                                 </AlertDescription>
                             </Alert>
-                        )}
-                    </div>
-                    <div className="space-y-2 pt-4">
-                        <Label htmlFor="address-details">Detalles de la dirección</Label>
-                        <Input id="address-details" placeholder="Por ejemplo: En la zona de aparcamiento (opcional)" />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="description">Descripción de la incidencia *</Label>
-                        <Textarea id="description" placeholder="Por ejemplo: Hay tres bolsas de basura en la zona de aparcamiento del supermercado" rows={4}/>
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Agregar foto</Label>
-                        <div className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center">
-                            <Camera className="h-10 w-10 text-muted-foreground mb-2"/>
-                            <p className="text-sm text-muted-foreground mb-2">Arrastra y suelta tus fotos aquí o</p>
-                            <Button variant="outline" asChild>
-                                <label htmlFor="photo-upload">
-                                    Seleccionar Archivos
-                                    <input id="photo-upload" type="file" className="sr-only" multiple accept="image/*" />
-                                </label>
-                            </Button>
-                             <p className="text-xs text-muted-foreground mt-2">Puedes añadir hasta 50 MB de archivos adjuntos</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox id="share-data" defaultChecked />
-                        <Label htmlFor="share-data" className="font-normal text-sm">Compartir los datos en el mapa público</Label>
-                    </div>
+                          )}
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="category"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Categoría *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccione una categoría para el reporte" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {Object.entries(categoryText).map(([value, label]) => (
+                                <SelectItem key={value} value={value}>{label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Descripción de la incidencia *</FormLabel>
+                          <FormControl>
+                            <Textarea placeholder="Por ejemplo: Hay tres bolsas de basura en la zona de aparcamiento del supermercado" rows={4} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="images"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Agregar foto (opcional)</FormLabel>
+                          <FormControl>
+                            <div className="border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center">
+                                <Camera className="h-10 w-10 text-muted-foreground mb-2"/>
+                                <p className="text-sm text-muted-foreground mb-2">Arrastra y suelta tus fotos aquí o</p>
+                                <Button variant="outline" asChild>
+                                    <label htmlFor="photo-upload">
+                                        Seleccionar Archivos
+                                        <input id="photo-upload" type="file" className="sr-only" multiple accept="image/*" onChange={handleFileChange} />
+                                    </label>
+                                </Button>
+                                <p className="text-xs text-muted-foreground mt-2">Puedes añadir hasta 5 imágenes.</p>
+                            </div>
+                          </FormControl>
+                          {imageFiles.length > 0 && (
+                            <div className="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                                {imageFiles.map((file, index) => (
+                                    <div key={index} className="relative group aspect-square">
+                                        <Image
+                                            src={URL.createObjectURL(file)}
+                                            alt={`previsualización ${index + 1}`}
+                                            layout="fill"
+                                            objectFit="cover"
+                                            className="rounded-md"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            size="icon"
+                                            className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            onClick={() => handleRemoveImage(index)}
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                          )}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="shareData"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                             <Label htmlFor="share-data" className="font-normal text-sm">Compartir los datos en el mapa público</Label>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
                 </CardContent>
             </Card>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Mis Datos</CardTitle>
-                     <CardDescription>
-                        Estos datos no se mostrarán públicamente. Se facilitan a la organización para la gestión.
-                    </CardDescription>
+                    <CardTitle>Mis Datos (Opcional)</CardTitle>
+                    <CardDescription>Estos datos no se mostrarán públicamente. Se facilitan a la organización para la gestión.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <p className="text-sm text-muted-foreground">
-                        Al crear una incidencia usted se compromete a aceptar nuestros <a href="#" className="text-primary hover:underline">términos y condiciones</a>.
-                    </p>
-                     <div className="space-y-2">
-                        <Label htmlFor="contact-address">Dirección (Opcional)</Label>
-                        <div className="relative">
-                            <Home className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                            <Input id="contact-address" placeholder="Ingrese aquí la dirección del notificador (opcional)" className="pl-10" />
-                        </div>
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Datos de contacto</Label>
-                         <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                            <Input id="email" type="email" placeholder="lucio.gutierrez@gmail.com" defaultValue="lucio.gutierrez@gmail.com" className="pl-10" />
-                        </div>
-                    </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="phone">Número de teléfono</Label>
-                        <div className="relative">
-                             <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                            <Input id="phone" type="tel" placeholder="Ingrese aquí el número de teléfono" className="pl-10" />
-                        </div>
-                    </div>
+                    <FormField
+                      control={form.control}
+                      name="contactEmail"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email de contacto</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                              <Input type="email" placeholder="tu@email.com" className="pl-10" {...field} />
+                            </div>
+                          </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                 </CardContent>
             </Card>
-             <Button size="lg" className="w-full">
+             <Button type="submit" size="lg" className="w-full" disabled={!form.formState.isValid}>
                 Enviar Incidencia
             </Button>
         </div>
         <div className="h-[calc(100vh-8rem)] sticky top-8">
             <ReportsMap 
-                reports={reports} 
+                reports={mockReports} 
                 roads={mockRuralRoads}
                 onMapClick={handleMapClick} 
                 center={mapCenter} 
@@ -277,7 +384,8 @@ export default function CrearIncidenciaPage() {
                 selectedLocation={selectedLocation}
             />
         </div>
-      </div>
+      </form>
+    </Form>
     </div>
   );
 }
