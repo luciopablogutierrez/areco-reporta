@@ -9,11 +9,13 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Camera, Home, Mail, MapPin, Phone, Search, Loader2 } from 'lucide-react';
+import { Camera, Home, Mail, MapPin, Phone, Search, Loader2, Info } from 'lucide-react';
 import { mockReports } from '@/lib/mock-data';
-import type { Report } from '@/types';
+import { mockRuralRoads } from '@/lib/mock-roads';
+import type { Report, RuralRoad } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useDebounce } from '@/hooks/use-debounce';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const ReportsMap = dynamic(() => import('@/components/map/reports-map'), {
   ssr: false,
@@ -26,6 +28,30 @@ interface NominatimResult {
     display_name: string;
 }
 
+// Function to calculate the squared distance from a point to a line segment
+function getSqDist(p: {lat: number, lng: number}, p1: {lat: number, lng: number}, p2: {lat: number, lng: number}) {
+    let x = p1.lat,
+        y = p1.lng,
+        dx = p2.lat - x,
+        dy = p2.lng - y;
+
+    if (dx !== 0 || dy !== 0) {
+        const t = ((p.lat - x) * dx + (p.lng - y) * dy) / (dx * dx + dy * dy);
+        if (t > 1) {
+            x = p2.lat;
+            y = p2.lng;
+        } else if (t > 0) {
+            x += dx * t;
+            y += dy * t;
+        }
+    }
+
+    dx = p.lat - x;
+    dy = p.lng - y;
+
+    return dx * dx + dy * dy;
+}
+
 
 export default function CrearIncidenciaPage() {
     const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -34,13 +60,39 @@ export default function CrearIncidenciaPage() {
     const [addressQuery, setAddressQuery] = useState('');
     const [addressResults, setAddressResults] = useState<NominatimResult[]>([]);
     const [isLoadingAddress, setIsLoadingAddress] = useState(false);
+    const [roadStatusAlert, setRoadStatusAlert] = useState<{road: RuralRoad} | null>(null);
     const { toast } = useToast();
     const debouncedSearchTerm = useDebounce(addressQuery, 500);
 
+    const checkLocationOnRuralRoad = useCallback((latlng: { lat: number, lng: number }) => {
+        const proximityThreshold = 0.00001; // Squared distance threshold, adjust as needed
+        let onRoad = null;
+
+        for (const road of mockRuralRoads) {
+            for (let i = 0; i < road.coordinates.length - 1; i++) {
+                const p1 = { lat: road.coordinates[i][0], lng: road.coordinates[i][1] };
+                const p2 = { lat: road.coordinates[i+1][0], lng: road.coordinates[i+1][1] };
+                const sqDist = getSqDist(latlng, p1, p2);
+
+                if (sqDist < proximityThreshold) {
+                    onRoad = road;
+                    break;
+                }
+            }
+            if (onRoad) break;
+        }
+        
+        if (onRoad && (onRoad.status === 'Amarillo' || onRoad.status === 'Rojo')) {
+            setRoadStatusAlert({ road: onRoad });
+        } else {
+            setRoadStatusAlert(null);
+        }
+    }, []);
 
     const handleMapClick = (latlng: { lat: number; lng: number }) => {
         setSelectedLocation(latlng);
         setMapCenter([latlng.lat, latlng.lng]);
+        checkLocationOnRuralRoad(latlng);
     };
 
     const handleSearchAddress = useCallback(async (query: string) => {
@@ -76,10 +128,13 @@ export default function CrearIncidenciaPage() {
     const handleSelectAddress = (result: NominatimResult) => {
         const lat = parseFloat(result.lat);
         const lng = parseFloat(result.lon);
+        const location = { lat, lng };
+
         setAddressQuery(result.display_name);
-        setSelectedLocation({ lat, lng });
+        setSelectedLocation(location);
         setMapCenter([lat, lng]);
         setAddressResults([]);
+        checkLocationOnRuralRoad(location);
     };
 
 
@@ -102,7 +157,7 @@ export default function CrearIncidenciaPage() {
                             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                             <Input 
                                 id="location" 
-                                placeholder="Escriba la calle para buscar..." 
+                                placeholder="Escriba la calle para buscar o haga click en el mapa..." 
                                 className="pl-10"
                                 value={addressQuery}
                                 onChange={(e) => setAddressQuery(e.target.value)}
@@ -132,6 +187,16 @@ export default function CrearIncidenciaPage() {
                             <p className="text-xs text-muted-foreground pt-2">
                                 Coordenadas seleccionadas: {selectedLocation.lat.toFixed(5)}, {selectedLocation.lng.toFixed(5)}
                             </p>
+                        )}
+                        {roadStatusAlert && (
+                            <Alert className="mt-4" variant={roadStatusAlert.road.status === 'Rojo' ? 'destructive' : 'default'}>
+                                <Info className="h-4 w-4" />
+                                <AlertTitle>Atención: Camino con Transitabilidad Limitada</AlertTitle>
+                                <AlertDescription>
+                                    El camino '{roadStatusAlert.road.name}' se encuentra en estado '{roadStatusAlert.road.status}'. 
+                                    {roadStatusAlert.road.description}
+                                </AlertDescription>
+                            </Alert>
                         )}
                     </div>
                     <div className="space-y-2 pt-4">
@@ -204,6 +269,7 @@ export default function CrearIncidenciaPage() {
         <div className="h-[calc(100vh-8rem)] sticky top-8">
             <ReportsMap 
                 reports={reports} 
+                roads={mockRuralRoads}
                 onMapClick={handleMapClick} 
                 center={mapCenter} 
                 zoom={14} 
@@ -215,5 +281,3 @@ export default function CrearIncidenciaPage() {
     </div>
   );
 }
-
-    

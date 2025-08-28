@@ -50,7 +50,7 @@ export default function MapaPage() {
         }
         return true;
       });
-  }, [mockReports, searchTerm, selectedStatuses, selectedCategories, selectedLocation]);
+  }, [searchTerm, selectedStatuses, selectedCategories, selectedLocation]);
 
   return (
     <div className="relative h-[calc(100vh-4rem)] w-full">
