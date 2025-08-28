@@ -41,7 +41,7 @@ export function RuralRoadsList({ roads, onRoadSelect, selectedRoadId, onSubscrib
         <Card className="h-full flex flex-col">
             <CardHeader className="flex-shrink-0">
                 <CardTitle>Lista de Caminos</CardTitle>
-                <div className="flex pt-2 gap-4 text-sm text-muted-foreground">
+                <div className="flex flex-wrap pt-2 gap-4 text-sm text-muted-foreground">
                     {(['Verde', 'Amarillo', 'Rojo'] as RuralRoadStatus[]).map((status) => (
                         <div key={status} className="flex items-center gap-2 font-medium">
                             <span className={cn("w-3 h-3 rounded-full", statusColors[status])} />
