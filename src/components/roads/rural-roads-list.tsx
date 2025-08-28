@@ -7,11 +7,14 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import { formatDistanceToNow } from "date-fns"
 import { es } from "date-fns/locale"
+import { Bell } from "lucide-react"
+import { Button } from "../ui/button"
 
 interface RuralRoadsListProps {
     roads: RuralRoad[]
     onRoadSelect: (road: RuralRoad) => void
     selectedRoadId?: string | null
+    onSubscribe: (road: RuralRoad) => void
 }
 
 const statusColors: Record<RuralRoadStatus, string> = {
@@ -27,7 +30,7 @@ const statusBorderColors: Record<RuralRoadStatus, string> = {
 }
 
 
-export function RuralRoadsList({ roads, onRoadSelect, selectedRoadId }: RuralRoadsListProps) {
+export function RuralRoadsList({ roads, onRoadSelect, selectedRoadId, onSubscribe }: RuralRoadsListProps) {
     const totalRoads = roads.length
     const roadsByStatus = roads.reduce((acc, road) => {
         acc[road.status] = (acc[road.status] || 0) + 1
@@ -35,7 +38,7 @@ export function RuralRoadsList({ roads, onRoadSelect, selectedRoadId }: RuralRoa
     }, {} as Record<RuralRoadStatus, number>)
 
     return (
-        <Card className="h-[calc(100vh-14rem)] flex flex-col">
+        <Card className="h-[calc(100vh-22rem)] flex flex-col">
             <CardHeader>
                 <CardTitle>Lista de Caminos</CardTitle>
                 <CardDescription>
@@ -57,24 +60,39 @@ export function RuralRoadsList({ roads, onRoadSelect, selectedRoadId }: RuralRoa
                     {roads.map(road => (
                         <div 
                             key={road.id} 
-                            onClick={() => onRoadSelect(road)}
                             className={cn(
-                                "p-4 cursor-pointer hover:bg-accent transition-colors",
+                                "p-4 cursor-pointer hover:bg-accent/50 transition-colors group",
                                 selectedRoadId === road.id && "bg-accent"
                             )}
                         >
-                            <div className="flex justify-between items-center">
-                                <span className="font-medium">{road.name}</span>
-                                <span className={cn(
-                                    "w-4 h-4 rounded-full border-2", 
-                                    statusBorderColors[road.status], 
-                                    statusColors[road.status]
-                                )}></span>
+                            <div onClick={() => onRoadSelect(road)}>
+                                <div className="flex justify-between items-center">
+                                    <span className="font-medium pr-2">{road.name}</span>
+                                    <span className={cn(
+                                        "w-4 h-4 rounded-full border-2 flex-shrink-0", 
+                                        statusBorderColors[road.status], 
+                                        statusColors[road.status]
+                                    )}></span>
+                                </div>
+                                <p className="text-sm text-muted-foreground mt-1">{road.description}</p>
                             </div>
-                            <p className="text-sm text-muted-foreground mt-1">{road.description}</p>
-                            <p className="text-xs text-muted-foreground mt-2">
-                                Act. {formatDistanceToNow(road.updatedAt.toDate(), { addSuffix: true, locale: es })}
-                            </p>
+                            <div className="flex justify-between items-center mt-2">
+                                <p className="text-xs text-muted-foreground">
+                                    Act. {formatDistanceToNow(road.updatedAt.toDate(), { addSuffix: true, locale: es })}
+                                </p>
+                                <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    className="h-auto p-1 text-muted-foreground hover:text-primary"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onSubscribe(road);
+                                    }}
+                                >
+                                    <Bell className="w-4 h-4 mr-1" />
+                                    <span className="text-xs">Suscribir</span>
+                                </Button>
+                            </div>
                         </div>
                     ))}
                     </div>
