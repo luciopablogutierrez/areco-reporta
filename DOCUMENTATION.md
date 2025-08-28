@@ -184,7 +184,38 @@ Un diagrama de alto nivel mostraría los siguientes componentes y flujos:
 
 ---
 
-## 9. Glosario
+## 9. Hoja de Ruta a Producción (Próximos Pasos)
+
+Para que CiudadConecta (ArecoReporta) pase de ser un prototipo funcional a un sistema productivo robusto, es necesario abordar las siguientes áreas clave:
+
+### 9.1. Integración con Backend y Base de Datos (Firebase)
+- **Reemplazar Datos Simulados:** El paso más crítico es sustituir los archivos `mock-data.ts` y `mock-roads.ts` por una conexión a una base de datos real como **Firestore**.
+  - **Colecciones sugeridas:** `reports`, `users`, `ruralRoads`, `municipalities`, `pets`.
+- **Servicios de Backend:** Implementar `Server Actions` para todas las operaciones de escritura (crear/actualizar reportes, registrar usuarios, etc.) y lectura de datos desde Firestore.
+- **Almacenamiento de Archivos:** Utilizar **Firebase Storage** para la subida de imágenes en los reportes de incidencias y en el registro de mascotas.
+
+### 9.2. Autenticación de Usuarios
+- **Implementar Firebase Authentication:** Configurar el sistema de inicio de sesión y registro utilizando proveedores como Email/Contraseña y Google.
+- **Rutas Protegidas:** Asegurar que las secciones como "Mis Reportes" o "Panel de Administración" solo sean accesibles para usuarios autenticados.
+- **Gestión de Roles:** Implementar un sistema de roles (`citizen`, `admin`) en la base de datos para gestionar los permisos, especialmente para el acceso al `/admin`.
+
+### 9.3. Funcionalidad en Tiempo Real
+- **Actualizaciones en el Mapa:** Utilizar los listeners en tiempo real de Firestore (`onSnapshot`) para que los reportes y los estados de los caminos rurales se actualicen en el mapa de todos los usuarios conectados sin necesidad de recargar la página.
+- **Notificaciones Instantáneas:** Desarrollar el backend para enviar notificaciones push o por email (utilizando **Firebase Functions** y **Cloud Messaging**) cuando el estado de un reporte cambie o un usuario reciba un comentario.
+
+### 9.4. Panel de Administración Funcional
+- **Gestión de Incidencias:** Permitir a los administradores cambiar el estado de un reporte, asignarlo a un equipo, añadir comentarios internos y ver un historial detallado.
+- **Gestión de Caminos Rurales:** Crear una interfaz donde los administradores puedan cambiar el estado de transitabilidad de un camino de forma rápida y sencilla.
+- **Métricas Reales:** Conectar los gráficos y estadísticas del dashboard a los datos reales de Firestore para obtener métricas precisas.
+
+### 9.5. Despliegue y Operaciones
+- **Configuración de Entornos:** Establecer un entorno de desarrollo y uno de producción en Firebase.
+- **CI/CD:** Configurar un pipeline de integración y despliegue continuo (ej. usando GitHub Actions) para automatizar las actualizaciones a producción.
+- **Monitoreo y Logs:** Implementar herramientas de monitoreo para supervisar el rendimiento y los errores del sistema en producción.
+
+---
+
+## 10. Glosario
 
 - **Server Action:** Una función de Next.js que se ejecuta de forma segura en el servidor, invocada desde un componente de cliente.
 - **Flow (Genkit):** Una función orquestadora que define un proceso de IA, como una cadena de prompts o la llamada a una herramienta.
@@ -194,10 +225,11 @@ Un diagrama de alto nivel mostraría los siguientes componentes y flujos:
 
 ---
 
-## 10. Referencias
+## 11. Referencias
 
 - **Next.js:** [https://nextjs.org/docs](https://nextjs.org/docs)
 - **Genkit:** [https://firebase.google.com/docs/genkit](https://firebase.google.com/docs/genkit)
 - **ShadCN/UI:** [https://ui.shadcn.com/](https://ui.shadcn.com/)
 - **Tailwind CSS:** [https://tailwindcss.com/docs](https://tailwindcss.com/docs)
 - **Leaflet.js:** [https://leafletjs.com/reference.html](https://leafletjs.com/reference.html)
+- **Firebase:** [https://firebase.google.com/docs](https://firebase.google.com/docs)
