@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
+import { usePetStore } from "@/store/pets";
 
 const animalFormSchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio.").max(32, "El nombre no puede tener más de 32 caracteres."),
@@ -37,6 +39,8 @@ type AnimalFormValues = z.infer<typeof animalFormSchema>;
 const defaultValues: Partial<AnimalFormValues> = {};
 
 export default function RegistroAnimalPage() {
+  const router = useRouter();
+  const addPet = usePetStore((state) => state.addPet);
   const form = useForm<AnimalFormValues>({
     resolver: zodResolver(animalFormSchema),
     defaultValues,
@@ -46,14 +50,18 @@ export default function RegistroAnimalPage() {
   const animalType = form.watch("type");
 
   function onSubmit(data: AnimalFormValues) {
+    const newPet = {
+      id: crypto.randomUUID(),
+      ...data,
+      image: `https://placehold.co/300x200.png?text=${encodeURIComponent(data.name)}`,
+      createdAt: { toDate: () => new Date() },
+    };
+    addPet(newPet);
     toast({
-      title: "Formulario enviado:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+      title: "¡Mascota Registrada!",
+      description: `${data.name} ha sido añadido a tu lista.`,
     });
+    router.push('/animales/registro');
   }
 
   return (
@@ -95,7 +103,7 @@ export default function RegistroAnimalPage() {
                   <FormItem className="space-y-3">
                     <FormLabel>Tipo de animal</FormLabel>
                     <FormControl>
-                      <div className="flex gap-4">
+                      <div className="flex gap-4 flex-wrap">
                         <Button
                           type="button"
                           variant={field.value === 'perro' ? 'default' : 'outline'}

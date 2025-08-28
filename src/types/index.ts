@@ -122,3 +122,20 @@ export interface RuralRoad {
   description?: string;
   updatedAt: Timestamp;
 }
+
+export type PetType = 'perro' | 'gato' | 'equino' | 'otro';
+export type PetSex = 'macho' | 'hembra';
+export type PetCastrated = 'yes' | 'no';
+
+export interface Pet {
+  id: string;
+  name: string;
+  type: PetType;
+  breed: string;
+  sex?: PetSex;
+  color?: string;
+  weight?: string;
+  castrated: PetCastrated;
+  image: string;
+  createdAt: Timestamp;
+}
