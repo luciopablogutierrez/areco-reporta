@@ -83,7 +83,8 @@ Un diagrama de alto nivel mostraría los siguientes componentes y flujos:
     - Mapa y lista de caminos en una vista unificada y flexible.
     - En dispositivos móviles, el mapa se muestra en un panel deslizable (`Sheet`) al seleccionar un camino, mejorando la UX.
     - Lista detallada de todos los caminos con su estado, descripción y última actualización. Al seleccionar un camino, se resalta en la lista.
-    - Widget con datos climáticos (simulados) y enlace al portal de transparencia.
+    - Widget con datos climáticos (simulados) para añadir contexto al estado de los caminos.
+    - Enlace al "Portal de Transparencia" municipal, donde se publicarían datos abiertos, resoluciones y planes de mantenimiento.
 - **Ejemplo de Uso:** Un productor agropecuario desde su celular entra a la sección, pulsa en un camino y el mapa aparece en un panel inferior mostrándole la traza y el estado sin salir de la lista.
 
 ### 3.4. Módulo: Panel de Administración (`/admin`)
@@ -197,6 +198,7 @@ Para que CiudadConecta (ArecoReporta) pase de ser un prototipo funcional a un si
 - **ShadCN:** Una colección de componentes de UI reutilizables construidos sobre Radix UI y Tailwind CSS.
 - **Zustand:** Un gestor de estado minimalista para React.
 - **Transitabilidad:** Condición de un camino que determina si puede ser transitado por vehículos y bajo qué condiciones.
+- **Portal de Transparencia:** Sección del sitio web municipal donde se publican datos abiertos, documentos oficiales (como resoluciones) e informes de gestión para que puedan ser consultados por los ciudadanos.
 
 ---
 
