@@ -19,13 +19,13 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 const menuItems = [
-  { href: "/mapa", label: "Mapa Interactivo", icon: MapIcon },
-  { href: "/incidencias/crear", label: "Crear Incidencia", icon: PlusCircle },
-  { href: "/reportes", label: "Mis Reportes", icon: FileText },
-  { href: "/animales", label: "Animales", icon: Dog },
-  { href: "/caminos-rurales", label: "Caminos Rurales", icon: Tractor },
-  { href: "/notificaciones", label: "Notificaciones", icon: Bell },
-  { href: "/admin", label: "Panel Admin", icon: Shield },
+  { id: "tour-step-map", href: "/mapa", label: "Mapa Interactivo", icon: MapIcon },
+  { id: "tour-step-create-report", href: "/incidencias/crear", label: "Crear Incidencia", icon: PlusCircle },
+  { id: "tour-step-my-reports", href: "/reportes", label: "Mis Reportes", icon: FileText },
+  { id: "tour-step-pets", href: "/animales", label: "Animales", icon: Dog },
+  { id: "tour-step-rural-roads", href: "/caminos-rurales", label: "Caminos Rurales", icon: Tractor },
+  { id: "tour-step-notifications", href: "/notificaciones", label: "Notificaciones", icon: Bell },
+  { id: "tour-step-admin", href: "/admin", label: "Panel Admin", icon: Shield },
 ];
 
 export function SidebarNav() {
@@ -46,7 +46,7 @@ export function SidebarNav() {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.label}>
-              <Link href={item.href}>
+              <Link href={item.href} id={item.id}>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname.startsWith(item.href)}

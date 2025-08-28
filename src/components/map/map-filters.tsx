@@ -56,7 +56,7 @@ export function MapFilters() {
 
 
   return (
-    <Card className="absolute top-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-4xl p-2">
+    <Card id="tour-step-filters" className="absolute top-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-4xl p-2">
         <CardContent className="p-2 space-y-2">
             <div className="flex flex-col md:flex-row items-center gap-2">
                 <div className="relative flex-1 w-full">

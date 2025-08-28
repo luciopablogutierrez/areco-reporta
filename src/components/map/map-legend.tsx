@@ -6,7 +6,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { categoryText } from "@/lib/i18n";
 import { ReportCategory, RuralRoadStatus } from "@/types";
 import { cn } from "@/lib/utils";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, PlayCircle } from "lucide-react";
+import { Button } from "../ui/button";
 
 const reportCategoryColors: Record<ReportCategory, string> = {
     'baches': 'bg-red-500',
@@ -26,15 +27,22 @@ const roadStatusStyles: Record<RuralRoadStatus, { color: string, style: string, 
 };
 
 export function MapLegend() {
+    const handleRestartTour = () => {
+        // Remove the key from localStorage to allow the tour to start again
+        localStorage.removeItem('areco_reporta_tour_completed');
+        // Reload the page to re-trigger the tour logic
+        window.location.reload();
+      };
+
     return (
-        <div className="absolute bottom-4 right-4 z-10 w-full max-w-xs">
+        <div id="tour-step-legend" className="absolute bottom-4 right-4 z-10 w-full max-w-xs">
             <Accordion type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1" className="border-none">
                     <Card>
                         <AccordionTrigger className="p-4">
                             <CardHeader className="p-0 flex-row items-center gap-3">
                                 <HelpCircle className="w-6 h-6 text-primary" />
-                                <CardTitle>Leyenda del Mapa</CardTitle>
+                                <CardTitle>Leyenda y Ayuda</CardTitle>
                             </CardHeader>
                         </AccordionTrigger>
                         <AccordionContent>
@@ -63,6 +71,12 @@ export function MapLegend() {
                                             </div>
                                         ))}
                                     </div>
+                                </div>
+                                <div className="pt-2 border-t">
+                                    <Button variant="outline" className="w-full" onClick={handleRestartTour}>
+                                        <PlayCircle className="mr-2 h-4 w-4" />
+                                        Reiniciar Tour Guiado
+                                    </Button>
                                 </div>
                             </CardContent>
                         </AccordionContent>

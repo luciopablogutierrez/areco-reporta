@@ -8,6 +8,7 @@ import { useFilterStore } from '@/store/filters';
 import { locationTagMap } from '@/lib/i18n';
 import { mockRuralRoads } from '@/lib/mock-roads';
 import { MapLegend } from '@/components/map/map-legend';
+import { ProductTour } from '@/components/layout/product-tour';
 
 const ReportsMap = dynamic(() => import('@/components/map/reports-map'), {
   ssr: false,
@@ -54,6 +55,7 @@ export default function MapaPage() {
 
   return (
     <div className="relative h-[calc(100vh-4rem)] w-full">
+      <ProductTour />
       <MapFilters />
       <MapLegend />
       <div className="absolute inset-0 z-0">
