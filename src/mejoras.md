@@ -1,3 +1,4 @@
+
 # Sugerencias de Mejora UX/UI para CiudadConecta (ArecoReporta)
 
 Este documento identifica oportunidades para refinar la interfaz y la experiencia de usuario de la aplicación, con el objetivo de hacerla más intuitiva, accesible y eficiente para todos los ciudadanos.
@@ -42,6 +43,7 @@ Las siguientes sugerencias fueron propuestas y ya han sido integradas en el sist
 -   **Funcionalidad Completa del Módulo de Animales (Simulado):**
     -   **Hecho:** El usuario puede registrar, listar, editar (simulado) y eliminar sus mascotas.
     -   **Hecho:** El formulario de alerta de animal perdido ahora utiliza las mascotas registradas por el usuario, completando el flujo.
+    -   **Hecho:** El portal de animales ahora cuenta con filtros avanzados por texto, tipo de animal y zona.
 
 -   **Panel de Administración Dinámico:**
     -   **Hecho:** Las estadísticas y la lista de reportes recientes ahora se cargan dinámicamente desde los datos simulados.
