@@ -306,9 +306,8 @@ export default function CrearIncidenciaPage() {
                                         <Image
                                             src={URL.createObjectURL(file)}
                                             alt={`previsualización ${index + 1}`}
-                                            layout="fill"
-                                            objectFit="cover"
-                                            className="rounded-md"
+                                            fill
+                                            className="rounded-md object-cover"
                                         />
                                         <Button
                                             type="button"
@@ -369,7 +368,7 @@ export default function CrearIncidenciaPage() {
                     />
                 </CardContent>
             </Card>
-             <Button type="submit" size="lg" className="w-full" disabled={!form.formState.isValid}>
+             <Button type="submit" size="lg" className="w-full" disabled={!form.formState.isValid || !form.getValues('location')}>
                 Enviar Incidencia
             </Button>
         </div>
@@ -389,3 +388,5 @@ export default function CrearIncidenciaPage() {
     </div>
   );
 }
+
+    

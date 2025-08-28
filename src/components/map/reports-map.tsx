@@ -187,7 +187,7 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
         const isSelected = road.id === selectedRoadId;
         const style = statusStyles[road.status] || { color: '#6b7280', dashArray: '' };
         
-        const polyline = L.polyline(road.coordinates, {
+        const polyline = L.polyline(road.coordinates as L.LatLngExpression[], {
           color: style.color,
           weight: isSelected ? 8 : 5,
           opacity: isSelected ? 1 : 0.8,
@@ -256,3 +256,5 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
 };
 
 export default ReportsMap;
+
+    
