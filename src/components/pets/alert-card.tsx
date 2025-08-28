@@ -8,20 +8,32 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
-import { MapPin, Phone, MessageSquare } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { locationText } from "@/lib/i18n";
+import { useNotificationStore } from "@/store/notifications";
 
 interface AlertCardProps {
   alert: PetAlert;
 }
 
 export function AlertCard({ alert }: AlertCardProps) {
+  const addNotification = useNotificationStore((state) => state.addNotification);
   
   const handleContact = () => {
+    // 1. Add a notification for the pet owner (simulated)
+    addNotification({
+      id: `pet-info-${crypto.randomUUID()}`,
+      type: 'pet_info',
+      message: `¡Buenas noticias! Alguien tiene información sobre tu mascota perdida: ${alert.pet.name}.`,
+      read: false,
+      createdAt: new Date(),
+    });
+
+    // 2. Show a toast to the user who clicked the button
     toast({
-        title: "Función en desarrollo",
-        description: "Próximamente podrás contactar al dueño directamente.",
+        title: "¡Gracias por tu ayuda!",
+        description: `Se ha notificado al dueño de ${alert.pet.name}. Pronto podría ponerse en contacto.`,
     })
   }
 

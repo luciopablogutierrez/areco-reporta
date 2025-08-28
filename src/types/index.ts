@@ -104,9 +104,11 @@ export interface ReportUpdate {
   createdAt: Timestamp;
 }
 
+export type NotificationType = 'status_change' | 'new_comment' | 'report_resolved' | 'mention' | 'pet_info';
+
 export interface Notification {
   id: string;
-  type: 'status_change' | 'new_comment' | 'report_resolved' | 'mention';
+  type: NotificationType;
   message: string;
   read: boolean;
   createdAt: Date;

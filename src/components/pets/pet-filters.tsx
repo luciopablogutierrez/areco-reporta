@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { usePetFilterStore } from "@/store/petFilters";
-import { Dog, Cat, GitCommitHorizontal, Search, X, Horse } from "lucide-react";
+import { Dog, Cat, GitCommitHorizontal, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { locationText } from "@/lib/i18n";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
@@ -15,7 +15,7 @@ import type { PetType } from "@/types";
 const typeOptions: { value: PetType, label: string, icon: React.ElementType }[] = [
     { value: "perro", label: "Perro", icon: Dog },
     { value: "gato", label: "Gato", icon: Cat },
-    { value: "equino", label: "Equino", icon: Horse },
+    { value: "equino", label: "Equino", icon: GitCommitHorizontal },
     { value: "otro", label: "Otro", icon: GitCommitHorizontal },
 ]
 
