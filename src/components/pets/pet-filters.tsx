@@ -15,6 +15,7 @@ import type { PetType } from "@/types";
 const typeOptions: { value: PetType, label: string, icon: React.ElementType }[] = [
     { value: "perro", label: "Perro", icon: Dog },
     { value: "gato", label: "Gato", icon: Cat },
+    { value: "equino", label: "Equino", icon: GitCommitHorizontal },
     { value: "otro", label: "Otro", icon: GitCommitHorizontal },
 ]
 
@@ -49,7 +50,7 @@ export function PetFilters() {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                         <p className="text-sm font-medium text-muted-foreground hidden md:block">Tipo:</p>
                         {typeOptions.map(({ value, label, icon: Icon }) => (
                             <Button 

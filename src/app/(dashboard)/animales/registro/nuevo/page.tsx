@@ -219,8 +219,7 @@ export default function RegistroAnimalPage() {
                 )}
               />
               
-              {(animalType === 'perro' || animalType === 'gato') && (
-                <FormField
+              <FormField
                   control={form.control}
                   name="sex"
                   render={({ field }) => (
@@ -250,7 +249,6 @@ export default function RegistroAnimalPage() {
                     </FormItem>
                   )}
                 />
-              )}
 
 
               <Button type="submit" className="w-full">Guardar Animal</Button>
