@@ -103,7 +103,7 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
         };
         const iconColor = categoryColors[category] || '#6b7280';
         const iconOpacity = status === 'resolved' ? 0.5 : 1;
-        const iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`;
+        const iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-v-2h2v2zm0-4h-2V7h2v6z"/></svg>`;
     
         return L.divIcon({
           html: `
@@ -169,10 +169,10 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
     if (typeof window !== 'undefined' && mapInstanceRef.current && roadsGroupRef.current) {
       const L = require('leaflet');
       
-      const statusColors: Record<RuralRoadStatus, string> = {
-        'Verde': '#22c55e', // green-500
-        'Amarillo': '#f59e0b', // amber-500
-        'Rojo': '#ef4444', // red-500
+      const statusStyles: Record<RuralRoadStatus, { color: string; dashArray: string }> = {
+        'Verde': { color: '#22c55e', dashArray: '' },       // green-500, solid
+        'Amarillo': { color: '#f59e0b', dashArray: '5, 10' }, // amber-500, dotted
+        'Rojo': { color: '#ef4444', dashArray: '15, 10' },    // red-500, dashed
       };
 
       roadsGroupRef.current.clearLayers();
@@ -180,17 +180,20 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
 
       roads.forEach(road => {
         const isSelected = road.id === selectedRoadId;
+        const style = statusStyles[road.status] || { color: '#6b7280', dashArray: '' };
+        
         const polyline = L.polyline(road.coordinates, {
-          color: statusColors[road.status] || '#6b7280',
+          color: style.color,
           weight: isSelected ? 8 : 5,
           opacity: isSelected ? 1 : 0.8,
+          dashArray: style.dashArray,
         });
 
         const popupContent = `
           <div class="p-1">
             <h3 class="font-bold text-base mb-1">${road.name}</h3>
             <div class="flex items-center gap-2 mb-2">
-              <span style="background-color: ${statusColors[road.status]}" class="w-3 h-3 rounded-full"></span>
+              <span style="background-color: ${style.color}" class="w-3 h-3 rounded-full"></span>
               <span class="font-semibold text-sm">${road.status}</span>
             </div>
             <p class="text-xs text-muted-foreground">${road.description}</p>
