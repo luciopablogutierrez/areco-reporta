@@ -54,6 +54,7 @@ Las siguientes sugerencias fueron propuestas y ya han sido integradas en el sist
 
 -   **Mejora de la Interfaz de Caminos Rurales:**
     -   **Hecho:** Al seleccionar un camino rural en el mapa, ahora se resalta visualmente en la lista para una mejor contextualización.
+    -   **Hecho:** Se ha añadido un widget de clima simulado para contextualizar el estado de los caminos.
 
 -   **Accesibilidad y Legibilidad Visual:**
     -   **Hecho:** Se han añadido patrones de línea a los caminos rurales en el mapa para mejorar la accesibilidad, además del color.
