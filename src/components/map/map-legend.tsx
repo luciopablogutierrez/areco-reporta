@@ -36,7 +36,7 @@ export function MapLegend() {
 
     return (
         <div id="tour-step-legend" className="absolute bottom-4 right-4 z-10 w-full max-w-xs">
-            <Accordion type="single" collapsible defaultValue="item-1">
+            <Accordion type="single" collapsible>
                 <AccordionItem value="item-1" className="border-none">
                     <Card>
                         <AccordionTrigger className="p-4">

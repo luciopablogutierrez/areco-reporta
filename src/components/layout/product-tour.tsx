@@ -12,9 +12,13 @@ export function ProductTour() {
   const { theme } = useTheme();
 
   useEffect(() => {
+    // This effect should only run on the client side
     const tourCompleted = localStorage.getItem(TOUR_STORAGE_KEY);
     if (tourCompleted !== 'true') {
-      setRun(true);
+      // Use a timeout to ensure the DOM is ready and elements are targetable
+      setTimeout(() => {
+        setRun(true);
+      }, 500);
     }
   }, []);
 
@@ -24,6 +28,11 @@ export function ProductTour() {
       content: '¡Te damos la bienvenida a ArecoReporta! Te guiaremos rápidamente por las funciones principales.',
       placement: 'center',
       disableBeacon: true,
+    },
+    {
+      target: '#tour-step-map',
+      content: 'Este es el mapa interactivo, el corazón de la aplicación. Aquí verás todas las incidencias y el estado de los caminos.',
+      placement: 'right',
     },
     {
       target: '#tour-step-filters',
@@ -41,9 +50,24 @@ export function ProductTour() {
       placement: 'right',
     },
     {
+      target: '#tour-step-pets',
+      content: 'Gestiona tus mascotas, repórtalas como perdidas y ayuda a otros a encontrar las suyas en este portal comunitario.',
+      placement: 'right',
+    },
+    {
         target: '#tour-step-rural-roads',
         content: 'Consulta el estado de los caminos rurales en tiempo real para planificar tus viajes de forma segura.',
         placement: 'right',
+    },
+     {
+      target: '#tour-step-notifications',
+      content: 'Revisa aquí las últimas notificaciones sobre tus reportes y mascotas.',
+      placement: 'right',
+    },
+     {
+      target: '#tour-step-admin',
+      content: 'Si tienes permisos, desde aquí podrás acceder al panel de administración para gestionar la plataforma.',
+      placement: 'right',
     },
     {
       target: '#tour-step-legend',
@@ -62,6 +86,11 @@ export function ProductTour() {
     }
   };
 
+  // Only render Joyride on the client
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  
   return (
     <Joyride
       callback={handleJoyrideCallback}
