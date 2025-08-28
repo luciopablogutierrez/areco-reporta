@@ -43,58 +43,60 @@ export default function CaminosRuralesPage() {
   };
 
   return (
-    <div className="space-y-6">
-        <header>
-            <h1 className="text-3xl font-bold flex items-center gap-3">
-                <Tractor className="w-8 h-8 text-primary"/>
-                Estado de Caminos Rurales
-            </h1>
-            <p className="text-muted-foreground">Información sobre la transitabilidad de la red vial rural de San Antonio de Areco.</p>
-        </header>
-        
+    <div className="flex flex-col h-[calc(100vh-4rem)]">
+      <header className="flex-shrink-0">
+        <h1 className="text-3xl font-bold flex items-center gap-3">
+            <Tractor className="w-8 h-8 text-primary"/>
+            Estado de Caminos Rurales
+        </h1>
+        <p className="text-muted-foreground">Información sobre la transitabilidad de la red vial rural de San Antonio de Areco.</p>
+      </header>
+      
+      <div className="flex-shrink-0 mt-6 mb-6">
         <TransparencyWidget />
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 items-start h-[calc(100vh-20rem)]">
-            <div className="md:col-span-1 lg:col-span-1 h-full">
-                <RuralRoadsList 
-                    roads={mockRuralRoads} 
-                    onRoadSelect={handleRoadSelect}
-                    selectedRoadId={selectedRoad?.id}
-                    onSubscribe={handleSubscribe}
-                />
-            </div>
-            <div className="hidden md:block md:col-span-2 lg:col-span-3 h-full">
-                 <ReportsMap 
-                    center={mapCenter}
-                    zoom={mapZoom}
-                    className="h-full w-full rounded-lg shadow-lg"
-                    roads={mockRuralRoads}
-                    reports={[]}
-                    selectedRoadId={selectedRoad?.id}
-                />
-            </div>
-        </div>
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 min-h-0">
+          <div className="md:col-span-1 lg:col-span-1 h-full min-h-0">
+              <RuralRoadsList 
+                  roads={mockRuralRoads} 
+                  onRoadSelect={handleRoadSelect}
+                  selectedRoadId={selectedRoad?.id}
+                  onSubscribe={handleSubscribe}
+              />
+          </div>
+          <div className="hidden md:block md:col-span-2 lg:col-span-3 h-full">
+               <ReportsMap 
+                  center={mapCenter}
+                  zoom={mapZoom}
+                  className="h-full w-full rounded-lg shadow-lg"
+                  roads={mockRuralRoads}
+                  reports={[]}
+                  selectedRoadId={selectedRoad?.id}
+              />
+          </div>
+      </div>
 
-        {isMobile && selectedRoad && (
-            <Sheet open={!!selectedRoad} onOpenChange={(open) => !open && handleSheetClose()}>
-                <SheetContent side="bottom" className="h-[85vh] flex flex-col p-0">
-                   <SheetHeader className="p-4">
-                        <SheetTitle>{selectedRoad.name}</SheetTitle>
-                        <SheetDescription>{selectedRoad.description}</SheetDescription>
-                   </SheetHeader>
-                   <div className="flex-grow">
-                        <ReportsMap 
-                            center={mapCenter}
-                            zoom={mapZoom}
-                            className="h-full w-full"
-                            roads={mockRuralRoads}
-                            reports={[]}
-                            selectedRoadId={selectedRoad?.id}
-                        />
-                    </div>
-                </SheetContent>
-            </Sheet>
-        )}
+      {isMobile && selectedRoad && (
+          <Sheet open={!!selectedRoad} onOpenChange={(open) => !open && handleSheetClose()}>
+              <SheetContent side="bottom" className="h-[85vh] flex flex-col p-0">
+                 <SheetHeader className="p-4">
+                      <SheetTitle>{selectedRoad.name}</SheetTitle>
+                      <SheetDescription>{selectedRoad.description}</SheetDescription>
+                 </SheetHeader>
+                 <div className="flex-grow">
+                      <ReportsMap 
+                          center={mapCenter}
+                          zoom={mapZoom}
+                          className="h-full w-full"
+                          roads={mockRuralRoads}
+                          reports={[]}
+                          selectedRoadId={selectedRoad?.id}
+                      />
+                  </div>
+              </SheetContent>
+          </Sheet>
+      )}
     </div>
   );
 }
