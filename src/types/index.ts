@@ -139,3 +139,13 @@ export interface Pet {
   image: string;
   createdAt: Timestamp;
 }
+
+export interface PetAlert {
+  id: string;
+  pet: Pet;
+  type: 'lost' | 'found';
+  lastSeenLocation: string;
+  notes?: string;
+  alertCreatedAt: Timestamp;
+  status: 'active' | 'resolved';
+}

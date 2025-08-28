@@ -19,7 +19,7 @@ export default function AnimalesPage() {
 
             <div className="space-y-4">
                 <Card className="hover:bg-primary/5 transition-colors">
-                    <Link href="#">
+                    <Link href="/animales/portal">
                         <div className="flex items-center p-6">
                             <Newspaper className="w-8 h-8 mr-6 text-primary"/>
                             <div className="flex-grow">

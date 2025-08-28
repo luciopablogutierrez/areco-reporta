@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,9 +18,10 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import type { Pet } from "@/types";
+import type { Pet, PetAlert } from "@/types";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PetSelectorCard } from "./pet-selector-card";
+import { useAlertStore } from "@/store/alerts";
 
 const lostPetFormSchema = z.object({
   petId: z.string({
@@ -39,6 +39,8 @@ interface LostPetFormProps {
 
 export function LostPetForm({ pets }: LostPetFormProps) {
   const router = useRouter();
+  const addAlert = useAlertStore((state) => state.addAlert);
+
   const form = useForm<LostPetFormValues>({
     resolver: zodResolver(lostPetFormSchema),
     mode: "onChange",
@@ -46,11 +48,25 @@ export function LostPetForm({ pets }: LostPetFormProps) {
 
   function onSubmit(data: LostPetFormValues) {
     const selectedPet = pets.find(p => p.id === data.petId);
+    if (!selectedPet) return;
+
+    const newAlert: PetAlert = {
+        id: `alert-${crypto.randomUUID()}`,
+        pet: selectedPet,
+        type: 'lost',
+        lastSeenLocation: data.lastSeenLocation,
+        notes: data.notes,
+        alertCreatedAt: { toDate: () => new Date() },
+        status: 'active',
+    };
+
+    addAlert(newAlert);
+
     toast({
       title: "¡Alerta Creada!",
-      description: `Se ha reportado a ${selectedPet?.name} como perdido.`,
+      description: `Se ha reportado a ${selectedPet?.name} como perdido. La alerta ya es visible en el portal.`,
     });
-    router.push('/animales');
+    router.push('/animales/portal');
   }
 
   return (
