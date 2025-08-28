@@ -1,3 +1,4 @@
+
 // Using a simplified version of Timestamp for client-side representation
 type Timestamp = {
   toDate: () => Date;
@@ -108,4 +109,15 @@ export interface Notification {
   message: string;
   read: boolean;
   createdAt: Date;
+}
+
+export type RuralRoadStatus = 'Verde' | 'Amarillo' | 'Rojo';
+
+export interface RuralRoad {
+  id: string;
+  name: string;
+  status: RuralRoadStatus;
+  coordinates: [number, number][];
+  description?: string;
+  updatedAt: Timestamp;
 }

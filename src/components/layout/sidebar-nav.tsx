@@ -3,7 +3,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, FileText, Home, MapIcon, User, Shield, PlusCircle, Dog } from "lucide-react"
+import { Bell, FileText, Home, MapIcon, User, Shield, PlusCircle, Dog, Tractor } from "lucide-react"
 
 import {
   Sidebar,
@@ -23,6 +23,7 @@ const menuItems = [
   { href: "/incidencias/crear", label: "Crear Incidencia", icon: PlusCircle },
   { href: "/reportes", label: "Mis Reportes", icon: FileText },
   { href: "/animales", label: "Animales", icon: Dog },
+  { href: "/caminos-rurales", label: "Caminos Rurales", icon: Tractor },
   { href: "/notificaciones", label: "Notificaciones", icon: Bell },
   { href: "/admin", label: "Panel Admin", icon: Shield },
 ];
@@ -48,7 +49,7 @@ export function SidebarNav() {
               <Link href={item.href}>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname === item.href}
+                  isActive={pathname.startsWith(item.href)}
                   tooltip={item.label}
                 >
                   <div>

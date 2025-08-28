@@ -7,6 +7,7 @@ import { MapFilters } from '@/components/map/map-filters';
 import type { Report, ReportCategory, ReportStatus } from '@/types';
 import { useFilterStore } from '@/store/filters';
 import { locationTagMap } from '@/lib/i18n';
+import { mockRuralRoads } from '@/lib/mock-roads';
 
 const ReportsMap = dynamic(() => import('@/components/map/reports-map'), {
   ssr: false,
@@ -55,7 +56,13 @@ export default function MapaPage() {
     <div className="relative h-[calc(100vh-4rem)] w-full">
       <MapFilters />
       <div className="absolute inset-0 z-0">
-        <ReportsMap reports={filteredReports} center={[-34.45, -59.5]} zoom={10} className="h-full w-full" />
+        <ReportsMap 
+            reports={filteredReports} 
+            roads={mockRuralRoads}
+            center={[-34.25, -59.48]} 
+            zoom={12} 
+            className="h-full w-full" 
+        />
       </div>
     </div>
   );

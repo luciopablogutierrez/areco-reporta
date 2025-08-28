@@ -2,10 +2,11 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import type { Report, ReportCategory, ReportStatus } from '@/types';
+import type { Report, ReportCategory, ReportStatus, RuralRoad, RuralRoadStatus } from '@/types';
 
 interface ReportsMapProps {
   reports: Report[];
+  roads?: RuralRoad[];
   onReportClick?: (report: Report) => void;
   onMapClick?: (latlng: { lat: number; lng: number }) => void;
   center?: [number, number];
@@ -16,6 +17,7 @@ interface ReportsMapProps {
 
 const ReportsMap: React.FC<ReportsMapProps> = ({
   reports,
+  roads = [],
   onReportClick,
   onMapClick,
   center = [-34.6037, -58.3816], // Buenos Aires default
@@ -26,6 +28,7 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any | null>(null);
   const markersGroupRef = useRef<any | null>(null);
+  const roadsGroupRef = useRef<any | null>(null);
   const selectedMarkerRef = useRef<any | null>(null);
 
   // Dynamically import Leaflet and MarkerCluster to avoid SSR issues
@@ -45,13 +48,15 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
         maxZoom: 19,
       }).addTo(mapInstanceRef.current);
 
-      // Initialize marker cluster group
+      // Initialize layer groups
       markersGroupRef.current = L.markerClusterGroup({
         chunkedLoading: true,
         maxClusterRadius: 50,
       });
-
+      roadsGroupRef.current = L.layerGroup();
+      
       mapInstanceRef.current.addLayer(markersGroupRef.current);
+      mapInstanceRef.current.addLayer(roadsGroupRef.current);
 
       // Add map click handler
       if (onMapClick) {
@@ -155,6 +160,44 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
     }
   }, [reports, onReportClick]);
 
+  // Update rural roads layer
+  useEffect(() => {
+    if (typeof window !== 'undefined' && mapInstanceRef.current && roadsGroupRef.current) {
+      const L = require('leaflet');
+      
+      const statusColors: Record<RuralRoadStatus, string> = {
+        'Verde': '#22c55e', // green-500
+        'Amarillo': '#f59e0b', // amber-500
+        'Rojo': '#ef4444', // red-500
+      };
+
+      roadsGroupRef.current.clearLayers();
+
+      roads.forEach(road => {
+        const polyline = L.polyline(road.coordinates, {
+          color: statusColors[road.status] || '#6b7280',
+          weight: 5,
+          opacity: 0.8,
+        });
+
+        const popupContent = `
+          <div class="p-1">
+            <h3 class="font-bold text-base mb-1">${road.name}</h3>
+            <div class="flex items-center gap-2 mb-2">
+              <span style="background-color: ${statusColors[road.status]}" class="w-3 h-3 rounded-full"></span>
+              <span class="font-semibold text-sm">${road.status}</span>
+            </div>
+            <p class="text-xs text-muted-foreground">${road.description}</p>
+            <p class="text-xs text-muted-foreground mt-1">Última act.: ${road.updatedAt.toDate().toLocaleString()}</p>
+          </div>
+        `;
+        polyline.bindPopup(popupContent);
+
+        roadsGroupRef.current.addLayer(polyline);
+      });
+    }
+  }, [roads]);
+
   // Handle selected location marker
     useEffect(() => {
         if (mapInstanceRef.current) {
@@ -179,5 +222,3 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
 };
 
 export default ReportsMap;
-
-    
