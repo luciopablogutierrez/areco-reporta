@@ -366,6 +366,22 @@ export default function CrearIncidenciaPage() {
                         </FormItem>
                       )}
                     />
+                    <FormField
+                      control={form.control}
+                      name="contactPhone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Celular o Teléfono</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                              <Input type="tel" placeholder="Tu número de teléfono" className="pl-10" {...field} />
+                            </div>
+                          </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                 </CardContent>
             </Card>
              <Button type="submit" size="lg" className="w-full" disabled={!form.formState.isValid || !form.getValues('location')}>
@@ -388,5 +404,3 @@ export default function CrearIncidenciaPage() {
     </div>
   );
 }
-
-    
