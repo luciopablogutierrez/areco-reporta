@@ -4,61 +4,36 @@ Este documento identifica oportunidades para refinar la interfaz y la experienci
 
 ---
 
-### **Mejora 1: Completar el Módulo de Animales**
+### **Mejora Pendiente: El Salto a Producción**
 
 #### **1. Problema identificado**
-El módulo de animales tiene las pantallas de registro y alerta, pero la lógica no está completamente conectada. Un usuario puede registrar una mascota, pero el formulario de alerta de animal perdido aún no utiliza esa información.
+La aplicación actualmente es un prototipo robusto del lado del cliente, pero no tiene un sistema de usuarios real ni persistencia de datos. Todo es público o simulado para un único "usuario". Esto impide la personalización, la colaboración y la seguridad necesarias para un entorno productivo.
 
 #### **2. Propuesta de mejora**
-1.  **Conectar Formulario de Alerta:** Modificar la página de "Alerta Animal Perdido" para que muestre una lista de las mascotas registradas por el usuario, permitiéndole seleccionar una para reportar.
-2.  **Enviar la Alerta:** Implementar la lógica final para que, al enviar el formulario, se cree una alerta (actualmente simulada con un toast, pero lista para conectarse a un backend).
+1.  **Integrar Firebase Authentication:** Conectar la aplicación a un proyecto de Firebase y utilizar su servicio de autenticación. Implementar la lógica en las páginas `/login` y `/registro` para que los usuarios puedan crear cuentas e iniciar sesión.
+2.  **Conectar a Base de Datos (Firestore):** Migrar los datos simulados (`mock-data`, `mock-roads`, `pet-storage`) a colecciones en una base de datos NoSQL como Firestore.
+3.  **Implementar Server Actions para Escritura:** Reemplazar la lógica de cliente (como `addPet` en Zustand) por `Server Actions` que escriban directamente en Firestore para garantizar la persistencia de los datos.
+4.  **Proteger Rutas y Personalizar UI:** Restringir el acceso a páginas como `/reportes`, `/animales` y `/admin` solo a usuarios autenticados, y mostrar la información del usuario real en la interfaz.
 
 #### **3. Beneficio para el usuario**
-- **Flujo Completo:** El usuario puede completar todo el ciclo: registrar su mascota y, si es necesario, reportarla como perdida, haciendo que el módulo sea funcional de principio a fin.
-- **Experiencia Lógica:** Se elimina la confusión de tener un formulario de alerta que no se conecta con las mascotas ya existentes.
+- **Personalización Real:** El usuario podrá ver "Mis Reportes" y "Mis Animales" reales, guardados en su cuenta.
+- **Persistencia y Seguridad:** Los datos estarán seguros y no se perderán al recargar la página.
+- **Colaboración:** Múltiples usuarios (ciudadanos y administradores) podrán interactuar con el mismo sistema.
+- **Base para el Futuro:** Es el pilar para implementar notificaciones, roles de usuario (admin vs. ciudadano) y funcionalidades en tiempo real.
 
 #### **4. Prioridad**
-**Alta.** Es el paso final para completar una de las funcionalidades principales y más visibles de la aplicación.
+**Crítica.** Es la mejora indispensable para convertir el prototipo en una aplicación productiva y escalable.
 
 ---
 
-### **Mejora 2: Implementar Autenticación Real con Firebase**
+### **Mejoras Adicionales para la Versión Productiva**
 
-#### **1. Problema identificado**
-La aplicación actualmente no tiene un sistema de usuarios real. Todo es público o simulado para un único "usuario". Esto impide la personalización y la seguridad.
+#### **1. Trazado Preciso de Caminos Rurales**
 
-#### **2. Propuesta de mejora**
-1.  **Integrar Firebase Authentication:** Conectar la aplicación a un proyecto de Firebase y utilizar su servicio de autenticación.
-2.  **Hacer Funcionales el Login/Registro:** Implementar la lógica en las páginas `/login` y `/registro` para que los usuarios puedan crear cuentas e iniciar sesión con email/contraseña o proveedores como Google.
-3.  **Proteger Rutas:** Restringir el acceso a páginas como `/reportes`, `/animales` y `/admin` solo a usuarios autenticados.
-4.  **Personalizar UI:** Mostrar el nombre y email del usuario real en la barra lateral.
-
-#### **3. Beneficio para el usuario**
-- **Personalización:** El usuario podrá ver "Mis Reportes" y "Mis Animales" reales.
-- **Seguridad:** Los datos de los usuarios y sus reportes estarán protegidos.
-- **Base para el Futuro:** Es el pilar para implementar notificaciones, roles de usuario (admin vs. ciudadano) y persistencia de datos.
-
-#### **4. Prioridad**
-**Alta.** Es la mejora más importante para convertir el prototipo en una aplicación productiva y escalable.
-
----
-
-### **Mejora 3: Onboarding y Guía para Nuevos Usuarios**
-
-#### **1. Problema identificado**
-La aplicación asume que el usuario entenderá inmediatamente todas sus funcionalidades. Un nuevo usuario podría no descubrir cómo interpretar los estados de un reporte o el propósito de algunas secciones.
-
-#### **2. Propuesta de mejora**
-1.  **Tooltips Guiados:** En la primera visita a secciones clave (Mapa, Reportes), mostrar pequeños tooltips o pop-ups que señalen las funcionalidades principales (ej: "Usa estos filtros para acotar tu búsqueda").
-2.  **Estados Vacíos Ilustrativos:** Mejorar las pantallas que pueden estar vacías (ej: "Mis Animales" antes de registrar uno) con ilustraciones amigables y un llamado a la acción claro (ej: "Aún no has registrado mascotas. ¡Anímate a registrar la primera!").
-
-#### **3. Beneficio para el usuario**
-- **Curva de Aprendizaje Suave:** Los nuevos usuarios se sienten guiados y descubren el valor de la aplicación más rápidamente.
-- **Reducción de la Ambigüedad:** Se clarifica el propósito de cada sección, incluso cuando no hay datos que mostrar.
-- **Autonomía del Usuario:** Se empodera al usuario para que explore y utilice todas las herramientas a su disposición.
-
-#### **4. Prioridad**
-**Media.** Es muy importante para la adquisición y retención de nuevos usuarios, pero la funcionalidad principal ya es utilizable sin ella.
+*   **Problema identificado:** Actualmente, las rutas de los caminos rurales en el mapa se dibujan como líneas rectas que conectan una serie de puntos. Esta es una simplificación de prototipo que no sigue el trazado real de los caminos físicos.
+*   **Propuesta de mejora:** Integrar un **servicio de enrutamiento** (como OSRM, Valhalla o una API de mapas como la de Google Maps) para calcular la geometría exacta de la ruta entre los puntos de inicio y fin de un camino rural.
+*   **Beneficio para el usuario:** El mapa mostrará los caminos de forma realista y precisa, superpuestos correctamente sobre la cartografía base, lo que aumenta drásticamente la confianza y la usabilidad de la herramienta.
+*   **Prioridad:** **Media.** Es una mejora clave para la precisión visual y funcional una vez que el sistema base esté en producción.
 
 ---
 
@@ -67,13 +42,36 @@ La aplicación asume que el usuario entenderá inmediatamente todas sus funciona
 Las siguientes sugerencias fueron propuestas y ya han sido integradas en el sistema:
 
 -   **Claridad y Feedback en el Flujo de Creación de Incidencias:**
-    -   **Hecho:** El usuario ahora es redirigido a "Mis Reportes" tras un envío exitoso.
+    -   **Hecho:** El usuario es redirigido a "Mis Reportes" tras un envío exitoso.
     -   **Hecho:** Se ha implementado la previsualización de imágenes con opción a eliminarlas.
     -   **Hecho:** El botón de envío se deshabilita hasta que el formulario es válido.
+    -   **Hecho:** Se añadió búsqueda de direcciones y alertas contextuales sobre caminos rurales.
+    -   **Hecho:** Se ha añadido un campo opcional para el teléfono de contacto.
 
 -   **Contextualización y Simplificación en la Navegación y Filtros:**
     -   **Hecho:** Los filtros del mapa y de la lista de reportes ahora están sincronizados mediante un estado global (`Zustand`), proporcionando una experiencia coherente.
 
+-   **Funcionalidad Completa del Módulo de Animales (Simulado):**
+    -   **Hecho:** El usuario puede registrar, listar y eliminar sus mascotas.
+    -   **Hecho:** El formulario de alerta de animal perdido ahora utiliza las mascotas registradas por el usuario, completando el flujo.
+    -   **Hecho:** El portal de animales ahora cuenta con filtros avanzados por texto, tipo de animal y zona.
+    -   **Hecho:** Se ha mejorado la coherencia entre el formulario de creación de alertas y el sistema de filtros del portal.
+    -   **Hecho:** Se ha implementado un sistema de notificaciones simulado para cuando alguien reporta tener información de una mascota.
+
+-   **Panel de Administración Dinámico:**
+    -   **Hecho:** Las estadísticas y la lista de reportes recientes ahora se cargan dinámicamente desde los datos simulados.
+
+-   **Visualización de Historial de Reportes:**
+    -   **Hecho:** Los usuarios pueden hacer clic en el estado de un reporte para ver una línea de tiempo visual de todos sus cambios.
+
+-   **Mejora de la Interfaz de Caminos Rurales:**
+    -   **Hecho:** Al seleccionar un camino rural en el mapa, ahora se resalta visualmente en la lista para una mejor contextualización.
+    -   **Hecho:** Se ha añadido un widget de clima simulado para contextualizar el estado de los caminos.
+
 -   **Accesibilidad y Legibilidad Visual:**
     -   **Hecho:** Se han añadido patrones de línea a los caminos rurales en el mapa para mejorar la accesibilidad, además del color.
     -   **Hecho:** Se ha añadido una leyenda al mapa para clarificar la simbología.
+
+-   **Onboarding y Guía para Nuevos Usuarios:**
+    -   **Hecho:** Se han mejorado las pantallas de estado vacío (ej: "Mis Animales") con ilustraciones amigables y un llamado a la acción claro.
+    -   **Hecho:** Se ha creado un `instructivo.md` con una guía amigable para el usuario final.

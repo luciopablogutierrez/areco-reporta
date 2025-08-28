@@ -14,7 +14,7 @@ El sistema actual incluye las siguientes capacidades:
 - **Mapa Interactivo:** Visualización geoespacial de incidencias y estado de caminos rurales con filtros dinámicos y leyenda.
 - **Panel de Administración:** Métricas, gestión de reportes y herramientas de análisis de comunicaciones.
 - **Módulo de Caminos Rurales:** Publicación y consulta del estado de transitabilidad de la red vial rural.
-- **Módulo de Animales:** Registro de mascotas y gestión de alertas por animales perdidos.
+- **Módulo de Animales:** Registro de mascotas, gestión de alertas por animales perdidos y un portal público con filtros avanzados.
 
 ---
 
@@ -96,13 +96,14 @@ Un diagrama de alto nivel mostraría los siguientes componentes y flujos:
 - **Ejemplo de Uso:** Un gestor municipal revisa el panel y ve que el número de reportes resueltos ha aumentado, lo cual se refleja en las tarjetas de estadísticas.
 
 ### 3.5. Módulo: Animales (`/animales`)
-- **Descripción:** Permite a los ciudadanos registrar sus mascotas y reportarlas como perdidas.
+- **Descripción:** Permite a los ciudadanos registrar sus mascotas, reportarlas como perdidas y buscar en un portal público.
 - **Funcionalidades:**
-    - Formulario para registrar una mascota (perro, gato, etc.) con sus detalles (nombre, raza, foto).
-    - Listado de "Mis Animales" donde el usuario ve todas las mascotas que ha registrado, con opciones para editar y eliminar.
-    - Formulario para crear una "Alerta de Animal Perdido", donde el usuario selecciona una de sus mascotas registradas y añade detalles de la pérdida.
-    - Estados vacíos con ilustraciones amigables para guiar al usuario.
-- **Ejemplo de Uso:** Un ciudadano registra a su perro "Fido". Semanas después, "Fido" se pierde. El ciudadano entra a la app, va a "Alerta Animal Perdido", selecciona a "Fido" de su lista de mascotas y completa la información para generar la alerta.
+    - Formulario para registrar una mascota (perro, gato, etc.) con sus detalles.
+    - Listado de "Mis Animales" donde el usuario ve las mascotas que ha registrado, con opciones para eliminar.
+    - Formulario para crear una "Alerta de Animal Perdido", donde el usuario selecciona una de sus mascotas y añade detalles de la pérdida.
+    - Portal público de animales perdidos con filtros avanzados por texto, tipo de animal y zona.
+    - Simulación de notificaciones al dueño cuando alguien dice tener información.
+- **Ejemplo de Uso:** Un ciudadano registra a su perro "Fido". Semanas después, "Fido" se pierde. El ciudadano genera la alerta. Otro usuario ve a "Fido" en el portal, hace clic en "Tengo información" y el dueño recibe una notificación en la app.
 
 ---
 
@@ -174,7 +175,7 @@ Para que CiudadConecta (ArecoReporta) pase de ser un prototipo funcional a un si
 
 ### 9.1. Integración con Backend y Base de Datos (Firebase)
 - **Reemplazar Datos Simulados:** El paso más crítico es sustituir los archivos `mock-data.ts` y `mock-roads.ts` por una conexión a una base de datos real como **Firestore**.
-  - **Colecciones sugeridas:** `reports`, `users`, `ruralRoads`, `municipalities`, `pets`.
+  - **Colecciones sugeridas:** `reports`, `users`, `ruralRoads`, `municipalities`, `pets`, `alerts`.
 - **Servicios de Backend:** Implementar `Server Actions` para todas las operaciones de escritura (crear/actualizar reportes, registrar usuarios, etc.) y lectura de datos desde Firestore.
 - **Almacenamiento de Archivos:** Utilizar **Firebase Storage** para la subida de imágenes en los reportes de incidencias y en el registro de mascotas.
 
