@@ -27,6 +27,17 @@ La aplicación actualmente es un prototipo robusto del lado del cliente, pero no
 
 ---
 
+### **Mejoras Adicionales para la Versión Productiva**
+
+#### **1. Trazado Preciso de Caminos Rurales**
+
+*   **Problema identificado:** Actualmente, las rutas de los caminos rurales en el mapa se dibujan como líneas rectas que conectan una serie de puntos. Esta es una simplificación de prototipo que no sigue el trazado real de los caminos físicos.
+*   **Propuesta de mejora:** Integrar un **servicio de enrutamiento** (como OSRM, Valhalla o una API de mapas como la de Google Maps) para calcular la geometría exacta de la ruta entre los puntos de inicio y fin de un camino rural.
+*   **Beneficio para el usuario:** El mapa mostrará los caminos de forma realista y precisa, superpuestos correctamente sobre la cartografía base, lo que aumenta drásticamente la confianza y la usabilidad de la herramienta.
+*   **Prioridad:** **Media.** Es una mejora clave para la precisión visual y funcional una vez que el sistema base esté en producción.
+
+---
+
 ## Mejoras Ya Implementadas
 
 Las siguientes sugerencias fueron propuestas y ya han sido integradas en el sistema:
