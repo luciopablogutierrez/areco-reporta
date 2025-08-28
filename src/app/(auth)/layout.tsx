@@ -1,4 +1,4 @@
-import { Home } from "lucide-react";
+import { Building } from "lucide-react";
 
 export default function AuthLayout({
   children,
@@ -10,7 +10,7 @@ export default function AuthLayout({
       <div className="w-full max-w-md">
         <div className="flex justify-center items-center gap-3 mb-8">
             <div className="p-3 rounded-lg bg-primary text-primary-foreground">
-                <Home className="w-7 h-7"/>
+                <Building className="w-7 h-7"/>
             </div>
             <h1 className="text-4xl font-bold text-primary">ArecoReporta</h1>
         </div>

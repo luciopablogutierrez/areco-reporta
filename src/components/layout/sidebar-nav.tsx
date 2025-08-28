@@ -3,7 +3,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, FileText, Home, MapIcon, User, Shield, PlusCircle, Dog, Tractor } from "lucide-react"
+import { Bell, FileText, Building, MapIcon, User, Shield, PlusCircle, Dog, Tractor } from "lucide-react"
 
 import {
   Sidebar,
@@ -37,7 +37,7 @@ export function SidebarNav() {
         <SidebarHeader className="h-20 flex items-center justify-between p-4">
             <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg bg-primary text-primary-foreground">
-                    <Home className="w-6 h-6"/>
+                    <Building className="w-6 h-6"/>
                 </div>
                 <h1 className="text-xl font-bold text-primary group-data-[collapsible=icon]:hidden">ArecoReporta</h1>
             </div>
