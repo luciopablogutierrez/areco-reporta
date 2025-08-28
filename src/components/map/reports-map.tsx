@@ -13,6 +13,7 @@ interface ReportsMapProps {
   zoom?: number;
   className?: string;
   selectedLocation?: { lat: number; lng: number } | null;
+  selectedRoadId?: string | null;
 }
 
 const ReportsMap: React.FC<ReportsMapProps> = ({
@@ -24,12 +25,14 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
   zoom = 13,
   className = "h-[calc(100vh-14rem)] w-full rounded-lg shadow-lg",
   selectedLocation,
+  selectedRoadId,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any | null>(null);
   const markersGroupRef = useRef<any | null>(null);
   const roadsGroupRef = useRef<any | null>(null);
   const selectedMarkerRef = useRef<any | null>(null);
+  const polylinesRef = useRef<Map<string, any>>(new Map());
 
   // Dynamically import Leaflet and MarkerCluster to avoid SSR issues
   useEffect(() => {
@@ -95,7 +98,8 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
             'senalizacion': '#3b82f6',
             'espacios_verdes': '#22c55e',
             'infraestructura': '#8b5cf6',
-            'otros': '#6b7280'
+            'otros': '#6b7280',
+            'accesibilidad': '#9333ea'
         };
         const iconColor = categoryColors[category] || '#6b7280';
         const iconOpacity = status === 'resolved' ? 0.5 : 1;
@@ -172,12 +176,14 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
       };
 
       roadsGroupRef.current.clearLayers();
+      polylinesRef.current.clear();
 
       roads.forEach(road => {
+        const isSelected = road.id === selectedRoadId;
         const polyline = L.polyline(road.coordinates, {
           color: statusColors[road.status] || '#6b7280',
-          weight: 5,
-          opacity: 0.8,
+          weight: isSelected ? 8 : 5,
+          opacity: isSelected ? 1 : 0.8,
         });
 
         const popupContent = `
@@ -192,11 +198,34 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
           </div>
         `;
         polyline.bindPopup(popupContent);
+        
+        if (isSelected) {
+            polyline.bringToFront();
+        }
 
         roadsGroupRef.current.addLayer(polyline);
+        polylinesRef.current.set(road.id, polyline);
       });
     }
-  }, [roads]);
+  }, [roads, selectedRoadId]);
+
+    // Highlight selected road
+    useEffect(() => {
+        polylinesRef.current.forEach((polyline, id) => {
+            const isSelected = id === selectedRoadId;
+            polyline.setStyle({
+                weight: isSelected ? 8 : 5,
+                opacity: isSelected ? 1 : 0.8,
+            });
+            if (isSelected) {
+                polyline.bringToFront();
+                 if (mapInstanceRef.current && !mapInstanceRef.current.getBounds().contains(polyline.getBounds())) {
+                    mapInstanceRef.current.fitBounds(polyline.getBounds());
+                }
+            }
+        });
+  }, [selectedRoadId]);
+
 
   // Handle selected location marker
     useEffect(() => {

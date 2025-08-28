@@ -1,4 +1,5 @@
 
+
 // Using a simplified version of Timestamp for client-side representation
 type Timestamp = {
   toDate: () => Date;
