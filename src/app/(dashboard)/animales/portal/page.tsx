@@ -7,7 +7,7 @@ import { useAlertStore } from "@/store/alerts";
 import { usePetFilterStore } from "@/store/petFilters";
 import { Dog, Search } from "lucide-react";
 import { PetFilters } from '@/components/pets/pet-filters';
-import { locationTagMap } from '@/lib/i18n';
+import { locationTagMap, locationText } from '@/lib/i18n';
 
 export default function PortalPage() {
     const alerts = useAlertStore((state) => state.alerts);
@@ -18,14 +18,14 @@ export default function PortalPage() {
             const term = searchTerm.toLowerCase();
             const searchMatch = term ? 
                 alert.pet.name.toLowerCase().includes(term) || 
-                alert.lastSeenLocation.toLowerCase().includes(term) ||
-                alert.pet.breed.toLowerCase().includes(term) : true;
+                alert.lastSeenDetails.toLowerCase().includes(term) ||
+                alert.pet.breed.toLowerCase().includes(term) ||
+                (locationText[alert.zone] && locationText[alert.zone].toLowerCase().includes(term))
+                : true;
             
             const typeMatch = selectedTypes.length > 0 ? selectedTypes.includes(alert.pet.type) : true;
             
-            // Note: This location filter is a simple string match. 
-            // In a real app, this would likely be a more robust geo-search.
-            const locationMatch = selectedLocation ? alert.lastSeenLocation.toLowerCase().includes(selectedLocation.toLowerCase()) : true;
+            const locationMatch = selectedLocation ? alert.zone === selectedLocation : true;
 
             return searchMatch && typeMatch && locationMatch && alert.status === 'active';
         });

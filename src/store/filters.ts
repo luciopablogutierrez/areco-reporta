@@ -2,19 +2,17 @@
 'use client';
 
 import { create } from 'zustand';
-import type { ReportStatus, ReportCategory } from '@/types';
-
-type Location = 'san_antonio_de_areco' | 'villa_lia' | 'vagues' | 'duggan';
+import type { ReportStatus, ReportCategory, LocationZone } from '@/types';
 
 interface FilterState {
   searchTerm: string;
   selectedStatuses: ReportStatus[];
   selectedCategories: ReportCategory[];
-  selectedLocation: Location | null;
+  selectedLocation: LocationZone | null;
   setSearchTerm: (term: string) => void;
   setSelectedStatuses: (statuses: ReportStatus[]) => void;
   setSelectedCategories: (categories: ReportCategory[]) => void;
-  setSelectedLocation: (location: Location | null) => void;
+  setSelectedLocation: (location: LocationZone | null) => void;
   toggleStatus: (status: ReportStatus) => void;
   toggleCategory: (category: ReportCategory) => void;
   clearFilters: () => void;

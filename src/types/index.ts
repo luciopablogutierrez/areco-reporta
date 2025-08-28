@@ -126,6 +126,7 @@ export interface RuralRoad {
 export type PetType = 'perro' | 'gato' | 'equino' | 'otro';
 export type PetSex = 'macho' | 'hembra';
 export type PetCastrated = 'yes' | 'no';
+export type LocationZone = 'san_antonio_de_areco' | 'villa_lia' | 'vagues' | 'duggan';
 
 export interface Pet {
   id: string;
@@ -144,7 +145,8 @@ export interface PetAlert {
   id: string;
   pet: Pet;
   type: 'lost' | 'found';
-  lastSeenLocation: string;
+  zone: LocationZone;
+  lastSeenDetails: string;
   notes?: string;
   alertCreatedAt: Timestamp;
   status: 'active' | 'resolved';

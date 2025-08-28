@@ -2,17 +2,15 @@
 'use client';
 
 import { create } from 'zustand';
-import type { PetType } from '@/types';
-
-type Location = 'san_antonio_de_areco' | 'villa_lia' | 'vagues' | 'duggan';
+import type { PetType, LocationZone } from '@/types';
 
 interface PetFilterState {
   searchTerm: string;
   selectedTypes: PetType[];
-  selectedLocation: Location | null;
+  selectedLocation: LocationZone | null;
   setSearchTerm: (term: string) => void;
   toggleType: (type: PetType) => void;
-  setSelectedLocation: (location: Location | null) => void;
+  setSelectedLocation: (location: LocationZone | null) => void;
   clearFilters: () => void;
 }
 

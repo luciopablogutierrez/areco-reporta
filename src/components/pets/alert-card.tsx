@@ -10,6 +10,7 @@ import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { MapPin, Phone, MessageSquare } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { locationText } from "@/lib/i18n";
 
 interface AlertCardProps {
   alert: PetAlert;
@@ -36,9 +37,11 @@ export function AlertCard({ alert }: AlertCardProps) {
         <CardTitle className="text-xl">{alert.pet.name}</CardTitle>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4 text-primary" />
-            Visto por última vez en: <span className="font-semibold text-foreground">{alert.lastSeenLocation}</span>
+            Visto por última vez en: <span className="font-semibold text-foreground">{locationText[alert.zone]}</span>
         </div>
-        {alert.notes && <p className="text-sm text-muted-foreground pt-1 border-t mt-2 ">{alert.notes}</p>}
+        <p className="text-sm text-foreground">{alert.lastSeenDetails}</p>
+
+        {alert.notes && <p className="text-sm text-muted-foreground pt-2 border-t mt-2 ">{alert.notes}</p>}
         
         <div className="flex flex-wrap gap-2 pt-2">
             <Badge variant="secondary">{alert.pet.type}</Badge>

@@ -22,12 +22,23 @@ import type { Pet, PetAlert } from "@/types";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PetSelectorCard } from "./pet-selector-card";
 import { useAlertStore } from "@/store/alerts";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { locationText } from "@/lib/i18n";
+import { Input } from "../ui/input";
+
+const locationOptions = Object.entries(locationText).map(([value, label]) => ({
+    value: value as keyof typeof locationText,
+    label,
+}));
 
 const lostPetFormSchema = z.object({
   petId: z.string({
     required_error: "Debes seleccionar una mascota.",
   }),
-  lastSeenLocation: z.string().min(10, "La descripción debe tener al menos 10 caracteres."),
+  zone: z.string({
+    required_error: "Debes seleccionar la zona donde se perdió."
+  }),
+  lastSeenLocation: z.string().min(10, "La descripción de la ubicación debe tener al menos 10 caracteres."),
   notes: z.string().optional(),
 });
 
@@ -54,7 +65,8 @@ export function LostPetForm({ pets }: LostPetFormProps) {
         id: `alert-${crypto.randomUUID()}`,
         pet: selectedPet,
         type: 'lost',
-        lastSeenLocation: data.lastSeenLocation,
+        zone: data.zone as keyof typeof locationText,
+        lastSeenDetails: data.lastSeenLocation,
         notes: data.notes,
         alertCreatedAt: { toDate: () => new Date() },
         status: 'active',
@@ -101,23 +113,48 @@ export function LostPetForm({ pets }: LostPetFormProps) {
                 </FormItem>
               )}
             />
-
-            <FormField
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <FormField
                 control={form.control}
-                name="lastSeenLocation"
+                name="zone"
                 render={({ field }) => (
-                <FormItem>
-                    <FormLabel>¿Dónde fue visto por última vez?</FormLabel>
-                    <FormControl>
-                    <Textarea placeholder="Ej: Cerca de la plaza principal, por la calle San Martín." {...field} rows={3} />
-                    </FormControl>
-                     <FormDescription>
-                        Sé lo más específico posible.
-                    </FormDescription>
+                    <FormItem>
+                    <FormLabel>Zona donde se perdió</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Seleccione una zona" />
+                        </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                        {locationOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
                     <FormMessage />
-                </FormItem>
+                    </FormItem>
                 )}
-            />
+                />
+                
+                <FormField
+                    control={form.control}
+                    name="lastSeenLocation"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Ubicación y detalles</FormLabel>
+                        <FormControl>
+                        <Input placeholder="Ej: Cerca de la plaza" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                            Sé lo más específico posible.
+                        </FormDescription>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+            </div>
             
             <FormField
                 control={form.control}

@@ -44,6 +44,7 @@ Las siguientes sugerencias fueron propuestas y ya han sido integradas en el sist
     -   **Hecho:** El usuario puede registrar, listar, editar (simulado) y eliminar sus mascotas.
     -   **Hecho:** El formulario de alerta de animal perdido ahora utiliza las mascotas registradas por el usuario, completando el flujo.
     -   **Hecho:** El portal de animales ahora cuenta con filtros avanzados por texto, tipo de animal y zona.
+    -   **Hecho:** Se ha mejorado la coherencia entre el formulario de creación de alertas y el sistema de filtros del portal.
 
 -   **Panel de Administración Dinámico:**
     -   **Hecho:** Las estadísticas y la lista de reportes recientes ahora se cargan dinámicamente desde los datos simulados.
