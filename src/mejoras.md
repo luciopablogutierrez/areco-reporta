@@ -4,25 +4,7 @@ Este documento identifica oportunidades para refinar la interfaz y la experienci
 
 ---
 
-### **Mejora 1: Completar el Módulo de Animales**
-
-#### **1. Problema identificado**
-El módulo de animales tiene las pantallas de registro y alerta, pero la lógica no está completamente conectada. Un usuario puede registrar una mascota, pero el formulario de alerta de animal perdido aún no utiliza esa información.
-
-#### **2. Propuesta de mejora**
-1.  **Conectar Formulario de Alerta:** Modificar la página de "Alerta Animal Perdido" para que muestre una lista de las mascotas registradas por el usuario, permitiéndole seleccionar una para reportar.
-2.  **Enviar la Alerta:** Implementar la lógica final para que, al enviar el formulario, se cree una alerta (actualmente simulada con un toast, pero lista para conectarse a un backend).
-
-#### **3. Beneficio para el usuario**
-- **Flujo Completo:** El usuario puede completar todo el ciclo: registrar su mascota y, si es necesario, reportarla como perdida, haciendo que el módulo sea funcional de principio a fin.
-- **Experiencia Lógica:** Se elimina la confusión de tener un formulario de alerta que no se conecta con las mascotas ya existentes.
-
-#### **4. Prioridad**
-**Alta.** Es el paso final para completar una de las funcionalidades principales y más visibles de la aplicación.
-
----
-
-### **Mejora 2: Implementar Autenticación Real con Firebase**
+### **Mejora 1: Implementar Autenticación Real con Firebase**
 
 #### **1. Problema identificado**
 La aplicación actualmente no tiene un sistema de usuarios real. Todo es público o simulado para un único "usuario". Esto impide la personalización y la seguridad.
@@ -55,9 +37,16 @@ Las siguientes sugerencias fueron propuestas y ya han sido integradas en el sist
 -   **Contextualización y Simplificación en la Navegación y Filtros:**
     -   **Hecho:** Los filtros del mapa y de la lista de reportes ahora están sincronizados mediante un estado global (`Zustand`), proporcionando una experiencia coherente.
 
+-   **Funcionalidad Completa del Módulo de Animales (Simulado):**
+    -   **Hecho:** El usuario puede registrar, listar, editar (simulado) y eliminar sus mascotas.
+    -   **Hecho:** El formulario de alerta de animal perdido ahora utiliza las mascotas registradas por el usuario, completando el flujo.
+
 -   **Accesibilidad y Legibilidad Visual:**
     -   **Hecho:** Se han añadido patrones de línea a los caminos rurales en el mapa para mejorar la accesibilidad, además del color.
     -   **Hecho:** Se ha añadido una leyenda al mapa para clarificar la simbología.
 
 -   **Onboarding y Guía para Nuevos Usuarios:**
     -   **Hecho:** Se han mejorado las pantallas de estado vacío (ej: "Mis Animales") con ilustraciones amigables y un llamado a la acción claro, en lugar de cajas grises genéricas. Esto suaviza la curva de aprendizaje y reduce la ambigüedad.
+
+-   **Mejora de la Interfaz de Caminos Rurales:**
+    -   **Hecho:** Al seleccionar un camino rural en el mapa, ahora se resalta visualmente en la lista para una mejor contextualización.

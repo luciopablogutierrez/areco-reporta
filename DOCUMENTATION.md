@@ -82,7 +82,7 @@ Un diagrama de alto nivel mostraría los siguientes componentes y flujos:
 - **Funcionalidades:**
     - Mapa y lista de caminos en una vista unificada y flexible.
     - En dispositivos móviles, el mapa se muestra en un panel deslizable (`Sheet`) al seleccionar un camino, mejorando la UX.
-    - Lista detallada de todos los caminos con su estado, descripción y última actualización.
+    - Lista detallada de todos los caminos con su estado, descripción y última actualización. Al seleccionar un camino, se resalta en la lista.
     - Widget con datos climáticos (simulados) y enlace al portal de transparencia.
 - **Ejemplo de Uso:** Un productor agropecuario desde su celular entra a la sección, pulsa en un camino y el mapa aparece en un panel inferior mostrándole la traza y el estado sin salir de la lista.
 
@@ -99,8 +99,9 @@ Un diagrama de alto nivel mostraría los siguientes componentes y flujos:
 - **Descripción:** Permite a los ciudadanos registrar sus mascotas y reportarlas como perdidas.
 - **Funcionalidades:**
     - Formulario para registrar una mascota (perro, gato, etc.) con sus detalles (nombre, raza, foto).
-    - Listado de "Mis Animales" donde el usuario ve todas las mascotas que ha registrado.
+    - Listado de "Mis Animales" donde el usuario ve todas las mascotas que ha registrado, con opciones para editar y eliminar.
     - Formulario para crear una "Alerta de Animal Perdido", donde el usuario selecciona una de sus mascotas registradas y añade detalles de la pérdida.
+    - Estados vacíos con ilustraciones amigables para guiar al usuario.
 - **Ejemplo de Uso:** Un ciudadano registra a su perro "Fido". Semanas después, "Fido" se pierde. El ciudadano entra a la app, va a "Alerta Animal Perdido", selecciona a "Fido" de su lista de mascotas y completa la información para generar la alerta.
 
 ---

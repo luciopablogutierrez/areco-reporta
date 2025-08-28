@@ -26,8 +26,15 @@ export default function CaminosRuralesPage() {
   const handleRoadSelect = (road: RuralRoad) => {
     setSelectedRoad(road);
     if (road.coordinates.length > 0) {
-      setMapCenter(road.coordinates[0] as LatLngTuple);
-      setMapZoom(14);
+      // Fit map to road bounds on desktop
+      if (!isMobile && mapInstanceRef.current) {
+        const L = require('leaflet');
+        const bounds = L.latLngBounds(road.coordinates as LatLngTuple[]);
+        mapInstanceRef.current.fitBounds(bounds, { padding: [50, 50] });
+      } else {
+        setMapCenter(road.coordinates[0] as LatLngTuple);
+        setMapZoom(14);
+      }
     }
   };
 
@@ -41,6 +48,9 @@ export default function CaminosRuralesPage() {
   const handleSheetClose = () => {
     setSelectedRoad(null);
   };
+  
+  // Ref to the Leaflet map instance
+  const mapInstanceRef = React.useRef<any>(null);
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)]">
@@ -73,6 +83,7 @@ export default function CaminosRuralesPage() {
                   roads={mockRuralRoads}
                   reports={[]}
                   selectedRoadId={selectedRoad?.id}
+                  setMapInstance={(map) => { mapInstanceRef.current = map; }}
               />
           </div>
       </div>

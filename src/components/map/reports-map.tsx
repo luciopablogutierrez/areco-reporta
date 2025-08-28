@@ -14,6 +14,7 @@ interface ReportsMapProps {
   className?: string;
   selectedLocation?: { lat: number; lng: number } | null;
   selectedRoadId?: string | null;
+  setMapInstance?: (map: any) => void;
 }
 
 const ReportsMap: React.FC<ReportsMapProps> = ({
@@ -26,6 +27,7 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
   className = "h-[calc(100vh-14rem)] w-full rounded-lg shadow-lg",
   selectedLocation,
   selectedRoadId,
+  setMapInstance
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any | null>(null);
@@ -44,6 +46,9 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
 
       // Initialize map
       mapInstanceRef.current = L.map(mapRef.current).setView(center, zoom);
+      if (setMapInstance) {
+        setMapInstance(mapInstanceRef.current);
+      }
 
       // Add tile layer
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -222,9 +227,6 @@ const ReportsMap: React.FC<ReportsMapProps> = ({
             });
             if (isSelected) {
                 polyline.bringToFront();
-                 if (mapInstanceRef.current && !mapInstanceRef.current.getBounds().contains(polyline.getBounds())) {
-                    mapInstanceRef.current.fitBounds(polyline.getBounds());
-                }
             }
         });
   }, [selectedRoadId]);
