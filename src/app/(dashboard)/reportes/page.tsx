@@ -74,8 +74,9 @@ export default function ReportesPage() {
         setSelectedReportForGraph(report);
     };
 
-  // In a real app, this would fetch reports for the logged-in user
-  const userReports = reports.filter(r => r.userId === 'user1' || r.userId === 'user2');
+  // In a real app, this would fetch reports for the logged-in user.
+  // Here we simulate it by filtering for a specific user ID.
+  const userReports = reports.filter(r => r.userId === 'user1');
 
   const filteredReports = React.useMemo(() => {
     return userReports
