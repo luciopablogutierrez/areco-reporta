@@ -12,10 +12,8 @@ export function ProductTour() {
   const { theme } = useTheme();
 
   useEffect(() => {
-    // This effect should only run on the client side
     const tourCompleted = localStorage.getItem(TOUR_STORAGE_KEY);
     if (tourCompleted !== 'true') {
-      // Use a timeout to ensure the DOM is ready and elements are targetable
       setTimeout(() => {
         setRun(true);
       }, 500);
@@ -31,7 +29,7 @@ export function ProductTour() {
     },
     {
       target: '#tour-step-filters',
-      content: 'Usa estos filtros para encontrar rápidamente incidencias en el mapa por categoría, estado o zona.',
+      content: 'Usa estos filtros para encontrar rápidamente incidencias por categoría, estado o zona.',
       placement: 'bottom',
     },
     {
@@ -81,7 +79,6 @@ export function ProductTour() {
     }
   };
 
-  // Only render Joyride on the client
   if (typeof window === 'undefined') {
     return null;
   }
