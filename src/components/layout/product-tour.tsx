@@ -24,15 +24,10 @@ export function ProductTour() {
 
   const steps: Step[] = [
     {
-      target: 'body',
-      content: '¡Te damos la bienvenida a ArecoReporta! Te guiaremos rápidamente por las funciones principales.',
-      placement: 'center',
-      disableBeacon: true,
-    },
-    {
       target: '#tour-step-map',
       content: 'Este es el mapa interactivo, el corazón de la aplicación. Aquí verás todas las incidencias y el estado de los caminos.',
       placement: 'right',
+      disableBeacon: true,
     },
     {
       target: '#tour-step-filters',
@@ -102,10 +97,10 @@ export function ProductTour() {
       steps={steps}
       styles={{
         options: {
-          arrowColor: theme === 'dark' ? '#0f172a' : '#fff',
-          backgroundColor: theme === 'dark' ? '#0f172a' : '#fff',
-          primaryColor: '#2563eb',
-          textColor: theme === 'dark' ? '#f8fafc' : '#0f172a',
+          arrowColor: theme === 'dark' ? 'hsl(var(--card))' : 'hsl(var(--card))',
+          backgroundColor: theme === 'dark' ? 'hsl(var(--card))' : 'hsl(var(--card))',
+          primaryColor: 'hsl(var(--primary))',
+          textColor: theme === 'dark' ? 'hsl(var(--foreground))' : 'hsl(var(--foreground))',
           zIndex: 1000,
         },
         buttonClose: {
@@ -118,8 +113,8 @@ export function ProductTour() {
         last: 'Finalizar',
         next: 'Siguiente',
         skip: 'Omitir',
+        progress: 'Paso {{current}} de {{total}}'
       }}
     />
   );
 }
-
