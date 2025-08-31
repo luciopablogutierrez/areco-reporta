@@ -12,7 +12,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Camera, Home, Mail, MapPin, Phone, Search, Loader2, Info, X, Trash2, ShieldCheck, KeyRound } from 'lucide-react';
 import { mockReports } from '@/lib/mock-data';
 import { mockRuralRoads } from '@/lib/mock-roads';
@@ -47,7 +46,6 @@ const incidenciaFormSchema = z.object({
     category: z.string({ required_error: "Debe seleccionar una categoría."}),
     description: z.string().min(10, "La descripción debe tener al menos 10 caracteres.").max(500, "Máximo 500 caracteres."),
     images: z.array(z.instanceof(File)).max(5, "Puedes subir un máximo de 5 imágenes.").optional(),
-    shareData: z.boolean().default(true),
     contactAddress: z.string().optional(),
     contactEmail: z.string().email("Debe ser un email válido."),
     contactPhone: z.string().min(8, "Debe ser un número de teléfono válido."),
@@ -101,7 +99,6 @@ export default function CrearIncidenciaPage() {
     const form = useForm<IncidenciaFormValues>({
         resolver: zodResolver(incidenciaFormSchema),
         defaultValues: {
-            shareData: true,
             images: [],
         },
         mode: 'onBlur'
@@ -477,20 +474,6 @@ export default function CrearIncidenciaPage() {
                         )}
                         />
                         
-                        <FormField
-                        control={form.control}
-                        name="shareData"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                            <FormControl>
-                                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                                <Label htmlFor="share-data" className="font-normal text-sm">Compartir los datos en el mapa público</Label>
-                            </div>
-                            </FormItem>
-                        )}
-                        />
                     </CardContent>
                 </Card>
             
@@ -522,3 +505,4 @@ export default function CrearIncidenciaPage() {
     </div>
   );
 }
+
